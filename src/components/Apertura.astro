@@ -7,7 +7,7 @@ const acompanantes = Astro.props.acompanantes ?? 1;
   id="apertura"
   class="fixed inset-0 z-50 flex min-h-screen w-full flex-col items-center justify-start overflow-y-auto bg-[#fce7e9]"
 >
-  <!--Techo floral -->
+  <!-- Techo floral -->
   <img
     src="images/techo-flor.png"
     alt=""
@@ -23,15 +23,13 @@ const acompanantes = Astro.props.acompanantes ?? 1;
 
     <!-- Mis XV años + sobre -->
     <div class="w-full max-w-2xl text-center">
-      <p class="font-great-vibes mt-3 text-5xl text-[#B87824]">
+      <p class="mt-3 font-great-vibes text-5xl text-[#B87824]">
         Mis
-
         <span
           class="ml-2 font-serif text-5xl font-light tracking-normal text-[#C98B2E]"
         >
           XV
         </span>
-
         años
       </p>
 
@@ -57,8 +55,7 @@ const acompanantes = Astro.props.acompanantes ?? 1;
       </p>
     </div>
 
-    <!-- Información -->
-    <!-- Separador decorativo -->
+    <!-- Separador -->
     <div class="mx-auto my-4 flex items-center justify-center gap-3">
       <div class="h-px w-16 bg-[#C98B2E]/50"></div>
 
@@ -70,7 +67,7 @@ const acompanantes = Astro.props.acompanantes ?? 1;
     <!-- Invitado -->
     <div class="mt-1 text-center">
       <p class="mt-2 font-great-vibes text-4xl text-[#B87824]">
-        {invitado}Omar Cardozo y FLia.
+        {invitado}
       </p>
 
       {
@@ -86,11 +83,48 @@ const acompanantes = Astro.props.acompanantes ?? 1;
 
   <!-- JavaScript -->
   <script>
+    import lanzarConfetti from "canvas-confetti";
+
     const apertura = document.getElementById("apertura");
     const boton = document.getElementById("boton-apertura");
     const contenido = document.getElementById("contenido-invitacion");
 
-    boton?.addEventListener("click", () => {
+    let audioContext: AudioContext;
+    let audioBuffer: AudioBuffer;
+
+    async function cargarSonido() {
+      audioContext = new AudioContext();
+
+      const respuesta = await fetch("/music/confetti-recortado.mp3");
+      const datos = await respuesta.arrayBuffer();
+
+      audioBuffer = await audioContext.decodeAudioData(datos);
+    }
+
+    cargarSonido();
+
+    function reproducirSonido() {
+      if (!audioContext || !audioBuffer) return;
+
+      const fuente = audioContext.createBufferSource();
+      const volumen = audioContext.createGain();
+
+      fuente.buffer = audioBuffer;
+      volumen.gain.value = 0.7;
+
+      fuente.connect(volumen);
+      volumen.connect(audioContext.destination);
+
+      fuente.start(0);
+    }
+
+    boton?.addEventListener("click", async () => {
+      if (audioContext?.state === "suspended") {
+        await audioContext.resume();
+      }
+
+      contenido?.classList.remove("hidden");
+
       apertura?.classList.add(
         "opacity-0",
         "pointer-events-none",
@@ -98,7 +132,38 @@ const acompanantes = Astro.props.acompanantes ?? 1;
         "duration-1000",
       );
 
-      contenido?.classList.remove("hidden");
+      setTimeout(() => {
+        // 🔊 Primero el PAM
+        reproducirSonido();
+
+        // 🎉 Después el confeti
+        setTimeout(() => {
+          lanzarConfetti({
+            particleCount: 150,
+            spread: 90,
+            startVelocity: 40,
+            gravity: 0.6,
+            scalar: 0.9,
+
+            origin: {
+              x: 0.5,
+              y: 0.65,
+            },
+
+            colors: [
+              "#CC5F16",
+              "#FFD166",
+              "#CC1627",
+              "#FF8FAB",
+              "#9B5DE5",
+              "#5F16CC",
+              "#83CC16",
+              "#16CCBA",
+              "#FF9F1C",
+            ],
+          });
+        }, 200);
+      }, 900);
 
       setTimeout(() => {
         apertura?.remove();
