@@ -1,0 +1,39 @@
+---
+
+---
+
+<audio id="musica-fondo" loop>
+  <source src="/music/cancion.mp3" type="audio/mpeg" />
+</audio>
+
+<button
+  id="boton-musica"
+  type="button"
+  aria-label="Reproducir música"
+  class="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#D4AF37] bg-[#101827]/90 text-2xl text-[#E5C76B] shadow-lg transition hover:scale-110"
+>
+  ♫
+</button>
+
+<script>
+  const musica = document.getElementById(
+    "musica-fondo",
+  ) as HTMLAudioElement | null;
+  const boton = document.getElementById("boton-musica");
+
+  boton?.addEventListener("click", async () => {
+    if (!musica) return;
+
+    if (musica.paused) {
+      await musica.play();
+
+      boton.textContent = "❚❚";
+      boton.setAttribute("aria-label", "Pausar música");
+    } else {
+      musica.pause();
+
+      boton.textContent = "♫";
+      boton.setAttribute("aria-label", "Reproducir música");
+    }
+  });
+</script>

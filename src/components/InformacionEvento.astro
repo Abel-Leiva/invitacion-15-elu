@@ -1,0 +1,102 @@
+<section
+  class="relative flex w-full flex-col items-center overflow-hidden bg-[#FCE7E9] px-4 pb-24 pt-16"
+>
+  <!-- Techo floral -->
+  <img
+    src="images/techo-flor.png"
+    alt=""
+    class="pointer-events-none absolute top-0 left-0 z-20 w-full drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]"
+  />
+
+  <!-- CONTENIDO -->
+  <div
+    class="relative z-20 flex w-full flex-col items-center px-5 pt-13.75 sm:pt-55 md:pt-75"
+  >
+    <!-- Invitado -->
+    <div class="text-center">
+      <h2
+        id="nombre-invitado"
+        class="mt-2 font-great-vibes text-5xl text-[#B87824] md:text-6xl"
+      >
+        Milo Jota
+      </h2>
+    </div>
+
+    <!-- Separador -->
+    <div class="mx-auto my-7 flex items-center justify-center gap-3">
+      <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+
+      <span class="text-lg text-[#C98B2E]">✦</span>
+
+      <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+    </div>
+
+    <!-- Invitación -->
+    <p
+      class="mx-auto max-w-xl text-center font-serif text-xl leading-relaxed text-[#8F683F]"
+    >
+      El sábado 5 de diciembre a las 20:00 hs, junto a mi familia, celebraremos
+      mis
+      <span class="text-[#C98B2E]">XV años</span>.
+    </p>
+
+    <p
+      class="mx-auto mt-5 max-w-xl text-center font-serif text-xl leading-relaxed text-[#8F683F]"
+    >
+      Nos encantaría que nos acompañes a festejar este momento tan importante.
+    </p>
+  </div>
+
+  <!-- Curva inferior -->
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+    <svg
+      class="relative block h-[55px] w-full"
+      viewBox="0 0 1440 100"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="
+          M0 50
+          C180 30 360 30 540 50
+          C720 70 900 70 1080 50
+          C1260 30 1350 35 1440 50
+          L1440 100
+          L0 100
+          Z
+        "
+        fill="#FCFAE7"></path>
+    </svg>
+  </div>
+</section>
+
+<script>
+  const nombreInvitado = document.getElementById("nombre-invitado");
+  const textoPara = document.getElementById("texto-para");
+
+  const parametros = new URLSearchParams(window.location.search);
+  const invitado = parametros.get("invitado");
+
+  if (nombreInvitado && textoPara && invitado) {
+    const nombres = invitado
+      .split(",")
+      .map((nombre) => nombre.trim())
+      .filter((nombre) => nombre.length > 0);
+
+    if (nombres.length === 1) {
+      textoPara.textContent = "Para vos";
+      nombreInvitado.textContent = nombres[0];
+    }
+
+    if (nombres.length > 1) {
+      textoPara.textContent = "Para ustedes";
+
+      if (nombres.length === 2) {
+        nombreInvitado.textContent = `${nombres[0]} y ${nombres[1]}`;
+      } else {
+        const ultimo = nombres.pop();
+        nombreInvitado.textContent = `${nombres.join(", ")} y ${ultimo}`;
+      }
+    }
+  }
+</script>

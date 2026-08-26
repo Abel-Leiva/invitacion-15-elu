@@ -1,0 +1,145 @@
+<section class="relative overflow-hidden bg-[#EFE7FC] px-1 pb-16 pt-1">
+  <div class="mx-auto max-w-3xl text-center">
+    <!-- Título -->
+    <h2 class="mt-2 font-great-vibes text-5xl text-[#B87824] md:text-6xl">
+      Faltan...
+    </h2>
+
+    <!-- Separador -->
+    <div class="mx-auto my-7 flex items-center justify-center gap-3">
+      <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+
+      <span class="text-lg text-[#C98B2E]">✦</span>
+
+      <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+    </div>
+
+    <!-- Contador -->
+    <div class="mt-4 grid grid-cols-4 gap-y-3">
+      <!-- Días -->
+      <div>
+        <span
+          id="dias"
+          class="block font-serif text-4xl font-light text-[#B87824] md:text-6xl"
+        >
+          00
+        </span>
+
+        <div class="mx-auto my-3 h-px w-10 bg-[#C98B2E]/40"></div>
+
+        <p
+          class="font-serif text-xs uppercase tracking-[0.25em] text-[#8F683F]"
+        >
+          Días
+        </p>
+      </div>
+
+      <!-- Horas -->
+      <div>
+        <span
+          id="horas"
+          class="block font-serif text-4xl font-light text-[#B87824] md:text-6xl"
+        >
+          00
+        </span>
+
+        <div class="mx-auto my-3 h-px w-10 bg-[#C98B2E]/40"></div>
+
+        <p
+          class="font-serif text-xs uppercase tracking-[0.25em] text-[#8F683F]"
+        >
+          Horas
+        </p>
+      </div>
+
+      <!-- Minutos -->
+      <div>
+        <span
+          id="minutos"
+          class="block font-serif text-4xl font-light text-[#B87824] md:text-6xl"
+        >
+          00
+        </span>
+
+        <div class="mx-auto my-3 h-px w-10 bg-[#C98B2E]/40"></div>
+
+        <p
+          class="font-serif text-xs uppercase tracking-[0.25em] text-[#8F683F]"
+        >
+          Minutos
+        </p>
+      </div>
+
+      <!-- Segundos -->
+      <div>
+        <span
+          id="segundos"
+          class="block font-serif text-4xl font-light text-[#B87824] md:text-6xl"
+        >
+          00
+        </span>
+
+        <div class="mx-auto my-3 h-px w-10 bg-[#C98B2E]/40"></div>
+
+        <p
+          class="font-serif text-xs uppercase tracking-[0.25em] text-[#8F683F]"
+        >
+          Segundos
+        </p>
+      </div>
+    </div>
+
+    <!-- Mensaje final -->
+    <div class="mt-10 w-full text-center">
+      <p class="font-great-vibes text-4xl text-[#B87824] md:text-5xl">
+        ¡Te esperamos!
+      </p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const fechaEvento = new Date("2026-12-05T20:00:00-03:00").getTime();
+
+    const diasEl = document.getElementById("dias");
+    const horasEl = document.getElementById("horas");
+    const minutosEl = document.getElementById("minutos");
+    const segundosEl = document.getElementById("segundos");
+
+    function actualizarContador() {
+      if (!diasEl || !horasEl || !minutosEl || !segundosEl) {
+        return;
+      }
+
+      const diferencia = fechaEvento - Date.now();
+
+      if (diferencia <= 0) {
+        diasEl.textContent = "00";
+        horasEl.textContent = "00";
+        minutosEl.textContent = "00";
+        segundosEl.textContent = "00";
+        return;
+      }
+
+      const dias = Math.floor(diferencia / 86400000);
+
+      const horas = Math.floor((diferencia / 3600000) % 24);
+
+      const minutos = Math.floor((diferencia / 60000) % 60);
+
+      const segundos = Math.floor((diferencia / 1000) % 60);
+
+      diasEl.textContent = String(dias).padStart(2, "0");
+
+      horasEl.textContent = String(horas).padStart(2, "0");
+
+      minutosEl.textContent = String(minutos).padStart(2, "0");
+
+      segundosEl.textContent = String(segundos).padStart(2, "0");
+    }
+
+    actualizarContador();
+
+    setInterval(actualizarContador, 1000);
+  </script>
+</section>

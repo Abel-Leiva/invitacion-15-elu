@@ -1,0 +1,108 @@
+---
+const invitado = Astro.props.invitado;
+const acompanantes = Astro.props.acompanantes ?? 1;
+---
+
+<section
+  id="apertura"
+  class="fixed inset-0 z-50 flex min-h-screen w-full flex-col items-center justify-start overflow-y-auto bg-[#fce7e9]"
+>
+  <!--Techo floral -->
+  <img
+    src="images/techo-flor.png"
+    alt=""
+    class="absolute top-0 left-0 z-10 w-full drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)]"
+  />
+
+  <!-- CONTENIDO -->
+  <div
+    class="relative z-20 flex w-full flex-col items-center px-5 pt-28.75 sm:pt-55 md:pt-75"
+  >
+    <!-- Nombre -->
+    <h1 class="font-great-vibes text-6xl text-[#B87824]">Eluney Sofia</h1>
+
+    <!-- Mis XV años + sobre -->
+    <div class="w-full max-w-2xl text-center">
+      <p class="font-great-vibes mt-3 text-5xl text-[#B87824]">
+        Mis
+
+        <span
+          class="ml-2 font-serif text-5xl font-light tracking-normal text-[#C98B2E]"
+        >
+          XV
+        </span>
+
+        años
+      </p>
+
+      <!-- Sobre -->
+      <button
+        id="boton-apertura"
+        type="button"
+        aria-label="Abrir invitación"
+        class="group mt-1 cursor-pointer"
+      >
+        <img
+          src="images/sobre-dorado-E.S-2.png"
+          alt="Tocar para abrir la invitación"
+          width="200"
+          height="220"
+          class="drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
+        />
+      </button>
+
+      <!-- Indicador -->
+      <p class="font-serif text-lg italic text-[#C98B2E]">
+        Toca el sobre para abrir la invitación
+      </p>
+    </div>
+
+    <!-- Información -->
+    <!-- Separador decorativo -->
+    <div class="mx-auto my-4 flex items-center justify-center gap-3">
+      <div class="h-px w-16 bg-[#C98B2E]/50"></div>
+
+      <span class="text-xl text-[#C98B2E]">✦</span>
+
+      <div class="h-px w-16 bg-[#C98B2E]/50"></div>
+    </div>
+
+    <!-- Invitado -->
+    <div class="mt-1 text-center">
+      <p class="mt-2 font-great-vibes text-4xl text-[#B87824]">
+        {invitado}Omar Cardozo y FLia.
+      </p>
+
+      {
+        acompanantes > 0 && (
+          <p class="mt-1.5 font-serif text-xl text-[#B87824]/80">
+            + {acompanantes}{" "}
+            {acompanantes === 1 ? "acompañante" : "acompañantes"}
+          </p>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const apertura = document.getElementById("apertura");
+    const boton = document.getElementById("boton-apertura");
+    const contenido = document.getElementById("contenido-invitacion");
+
+    boton?.addEventListener("click", () => {
+      apertura?.classList.add(
+        "opacity-0",
+        "pointer-events-none",
+        "transition-opacity",
+        "duration-1000",
+      );
+
+      contenido?.classList.remove("hidden");
+
+      setTimeout(() => {
+        apertura?.remove();
+      }, 1000);
+    });
+  </script>
+</section>
