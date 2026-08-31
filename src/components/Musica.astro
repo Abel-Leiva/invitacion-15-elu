@@ -1,8 +1,4 @@
----
-
----
-
-<audio id="musica-fondo" loop>
+<audio id="musica-fondo" preload="auto" loop>
   <source src="/music/cancion.mp3" type="audio/mpeg" />
 </audio>
 
@@ -19,7 +15,28 @@
   const musica = document.getElementById(
     "musica-fondo",
   ) as HTMLAudioElement | null;
+
   const boton = document.getElementById("boton-musica");
+
+  if (musica) {
+    musica.volume = 0.7;
+  }
+
+  // La música comienza únicamente cuando Apertura lo indique
+  window.addEventListener("musica-iniciar", async () => {
+    if (!musica) return;
+
+    try {
+      await musica.play();
+
+      if (boton) {
+        boton.textContent = "❚❚";
+        boton.setAttribute("aria-label", "Pausar música");
+      }
+    } catch (error) {
+      console.error("No se pudo reproducir la música:", error);
+    }
+  });
 
   boton?.addEventListener("click", async () => {
     if (!musica) return;

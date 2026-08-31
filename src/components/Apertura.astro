@@ -133,12 +133,12 @@ const acompanantes = Astro.props.acompanantes ?? 1;
       );
 
       setTimeout(() => {
-        // 🔊 Primero el PAM
+        // 🔊 Primero el PAF
         reproducirSonido();
 
         // 🎉 Después el confeti
         setTimeout(() => {
-          lanzarConfetti({
+          const confetti = lanzarConfetti({
             particleCount: 150,
             spread: 90,
             startVelocity: 40,
@@ -161,6 +161,13 @@ const acompanantes = Astro.props.acompanantes ?? 1;
               "#16CCBA",
               "#FF9F1C",
             ],
+          });
+
+          // 🎵 Música 500 ms después de terminar el confeti
+          confetti?.then(() => {
+            setTimeout(() => {
+              window.dispatchEvent(new Event("musica-iniciar"));
+            }, 500);
           });
         }, 200);
       }, 900);
