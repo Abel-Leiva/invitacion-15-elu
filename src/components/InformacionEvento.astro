@@ -1,3 +1,7 @@
+---
+
+---
+
 <section
   class="relative flex w-full flex-col items-center overflow-hidden bg-[#FCE7E9] px-4 pb-24 pt-16"
 >
@@ -9,6 +13,7 @@
   />
 
   <!-- CONTENIDO -->
+
   <div
     class="relative z-20 flex w-full flex-col items-center px-5 pt-13.75 sm:pt-55 md:pt-75"
   >
@@ -18,10 +23,11 @@
         id="nombre-invitado"
         class="mt-2 font-great-vibes text-5xl text-[#B87824] md:text-6xl"
       >
-        Milo Jota
+        Invitado
       </h2>
     </div>
 
+    ```
     <!-- Separador -->
     <div class="mx-auto my-7 flex items-center justify-center gap-3">
       <div class="h-px w-14 bg-[#C98B2E]/40"></div>
@@ -44,6 +50,7 @@
         <span class="font-lora font-medium text-[#C98B2E]">XV</span>{" "}
         años, y me encantaría que puedan acompañarme.
       </p>
+
       <p
         class="mt-5 font-lora text-xl font-medium italic leading-relaxed text-[#8F683F]"
       >
@@ -64,9 +71,11 @@
         , y nos gustaría mucho que estén ahí para recibirme.
       </p>
     </div>
+    ```
   </div>
 
   <!-- Curva inferior -->
+
   <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
     <svg
       class="relative block h-[55px] w-full"
@@ -90,32 +99,20 @@
 </section>
 
 <script>
+  import { invitados } from "../data/invitados.js";
+
   const nombreInvitado = document.getElementById("nombre-invitado");
-  const textoPara = document.getElementById("texto-para");
 
   const parametros = new URLSearchParams(window.location.search);
-  const invitado = parametros.get("invitado");
+  const idInvitado = Number(parametros.get("invitado"));
 
-  if (nombreInvitado && textoPara && invitado) {
-    const nombres = invitado
-      .split(",")
-      .map((nombre) => nombre.trim())
-      .filter((nombre) => nombre.length > 0);
+  // Buscar el invitado por su ID
+  const invitadoSeleccionado = invitados.find(
+    (invitado) => invitado.id === idInvitado,
+  );
 
-    if (nombres.length === 1) {
-      textoPara.textContent = "Para vos";
-      nombreInvitado.textContent = nombres[0];
-    }
-
-    if (nombres.length > 1) {
-      textoPara.textContent = "Para ustedes";
-
-      if (nombres.length === 2) {
-        nombreInvitado.textContent = `${nombres[0]} y ${nombres[1]}`;
-      } else {
-        const ultimo = nombres.pop();
-        nombreInvitado.textContent = `${nombres.join(", ")} y ${ultimo}`;
-      }
-    }
+  // Mostrar el nombre
+  if (nombreInvitado && invitadoSeleccionado) {
+    nombreInvitado.textContent = invitadoSeleccionado.nombre;
   }
 </script>

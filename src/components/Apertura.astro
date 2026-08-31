@@ -1,6 +1,5 @@
 ---
-const invitado = Astro.props.invitado;
-const acompanantes = Astro.props.acompanantes ?? 1;
+
 ---
 
 <section
@@ -15,12 +14,14 @@ const acompanantes = Astro.props.acompanantes ?? 1;
   />
 
   <!-- CONTENIDO -->
+
   <div
     class="relative z-20 flex w-full flex-col items-center px-5 pt-28.75 sm:pt-55 md:pt-75"
   >
     <!-- Nombre -->
     <h1 class="font-great-vibes text-6xl text-[#B87824]">Eluney Sofia</h1>
 
+    ```
     <!-- Mis XV años + sobre -->
     <div class="w-full max-w-2xl text-center">
       <p class="mt-3 font-great-vibes text-5xl text-[#B87824]">
@@ -66,39 +67,89 @@ const acompanantes = Astro.props.acompanantes ?? 1;
 
     <!-- Invitado -->
     <div class="mt-1 text-center">
-      <p class="mt-2 font-great-vibes text-4xl text-[#B87824]">
-        {invitado}
+      <p
+        id="nombre-invitado-apertura"
+        class="mt-2 font-great-vibes text-4xl text-[#B87824]"
+      >
+        Invitado
       </p>
 
-      {
-        acompanantes > 0 && (
-          <p class="mt-1.5 font-lora text-xl text-[#B87824]/80">
-            + {acompanantes}{" "}
-            {acompanantes === 1 ? "acompañante" : "acompañantes"}
-          </p>
-        )
-      }
+      <p
+        id="acompanantes-apertura"
+        class="mt-1.5 hidden font-lora text-xl text-[#B87824]/80"
+      >
+      </p>
     </div>
+    ```
   </div>
 
   <!-- JavaScript -->
+
   <script>
+    import { invitados } from "../data/invitados.js";
     import lanzarConfetti from "canvas-confetti";
+
+    // --------------------------------
+    // BUSCAR INVITADO POR ID
+    // --------------------------------
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const idInvitado = Number(parametros.get("invitado"));
+
+    const invitadoSeleccionado = invitados.find(
+      (invitado) => invitado.id === idInvitado,
+    );
+
+    const nombreInvitado = document.getElementById("nombre-invitado-apertura");
+
+    const acompanantesElemento = document.getElementById(
+      "acompanantes-apertura",
+    );
+
+    if (invitadoSeleccionado) {
+      // Mostrar nombre
+      if (nombreInvitado) {
+        nombreInvitado.textContent = invitadoSeleccionado.nombre;
+      }
+
+      // Mostrar acompañantes solamente para individuales
+      if (
+        acompanantesElemento &&
+        invitadoSeleccionado.tipo === "individual" &&
+        invitadoSeleccionado.acompanantesPermitidos > 0
+      ) {
+        const cantidad = invitadoSeleccionado.acompanantesPermitidos;
+
+        acompanantesElemento.textContent = `+ ${cantidad} ${cantidad === 1 ? "acompañante" : "acompañantes"}`;
+
+        acompanantesElemento.classList.remove("hidden");
+      }
+    }
+
+    // --------------------------------
+    // APERTURA + CONFETI + SONIDO
+    // --------------------------------
 
     const apertura = document.getElementById("apertura");
     const boton = document.getElementById("boton-apertura");
     const contenido = document.getElementById("contenido-invitacion");
 
-    let audioContext: AudioContext;
-    let audioBuffer: AudioBuffer;
+    let audioContext;
+    let audioBuffer;
 
     async function cargarSonido() {
-      audioContext = new AudioContext();
+      try {
+        audioContext = new AudioContext();
 
-      const respuesta = await fetch("/music/confetti-recortado.mp3");
-      const datos = await respuesta.arrayBuffer();
+        const respuesta = await fetch("/music/confetti-recortado.mp3");
 
-      audioBuffer = await audioContext.decodeAudioData(datos);
+        const datos = await respuesta.arrayBuffer();
+
+        audioBuffer = await audioContext.decodeAudioData(datos);
+      } catch (error) {
+        console.error("No se pudo cargar el sonido del confeti:", error);
+      }
     }
 
     cargarSonido();
@@ -133,10 +184,10 @@ const acompanantes = Astro.props.acompanantes ?? 1;
       );
 
       setTimeout(() => {
-        // 🔊 Primero el PAF
+        // 🔊 PAF
         reproducirSonido();
 
-        // 🎉 Después el confeti
+        // 🎉 Confeti
         setTimeout(() => {
           const confetti = lanzarConfetti({
             particleCount: 150,
