@@ -111,8 +111,23 @@
     (invitado) => invitado.id === idInvitado,
   );
 
-  // Mostrar el nombre
   if (nombreInvitado && invitadoSeleccionado) {
-    nombreInvitado.textContent = invitadoSeleccionado.nombre;
+    let texto = invitadoSeleccionado.nombre;
+
+    // Solo agregamos "invitado/s" en los casos individuales
+    // que tienen invitados adicionales.
+    if (invitadoSeleccionado.tipo === "individual") {
+      const cantidadInvitados = invitadoSeleccionado.integrantes.filter(
+        (integrante) => integrante.nombre === "Invitado",
+      ).length;
+
+      if (cantidadInvitados === 1) {
+        texto += " y un invitado";
+      } else if (cantidadInvitados > 1) {
+        texto += " y más invitados";
+      }
+    }
+
+    nombreInvitado.textContent = texto;
   }
 </script>

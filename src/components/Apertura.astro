@@ -14,23 +14,36 @@
   />
 
   <!-- CONTENIDO -->
-
   <div
-    class="relative z-20 flex w-full flex-col items-center px-5 pt-28.75 sm:pt-55 md:pt-75"
+    class="relative z-20 flex w-full flex-col items-center px-5 pt-24.75 sm:pt-55 md:pt-75"
   >
-    <!-- Nombre -->
-    <h1 class="font-great-vibes text-6xl text-[#B87824]">Eluney Sofia</h1>
-
     <!-- Mis XV años + sobre -->
     <div class="w-full max-w-2xl text-center">
-      <p class="mt-3 font-great-vibes text-5xl text-[#B87824]">
+      <p class="mt-1 mb-4 font-great-vibes text-3xl font-medium text-[#B87824]">
         Mis
         <span
-          class="ml-2 font-lora text-5xl font-light tracking-normal text-[#C98B2E]"
+          class="ml-2 font-lora text-4xl font-light tracking-normal text-[#C98B2E]"
         >
           XV
         </span>
         años
+      </p>
+
+      <h1 class="font-great-vibes text-5xl text-[#B87824]">Eluney Sofia</h1>
+      <!-- Separador -->
+      <div class="mx-auto my-4 flex items-center justify-center gap-3">
+        <div class="h-px w-16 bg-[#C98B2E]/50"></div>
+
+        <span class="text-xl text-[#C98B2E]">✦</span>
+
+        <div class="h-px w-16 bg-[#C98B2E]/50"></div>
+      </div>
+      <!-- Frase -->
+      <p
+        class="mt-4 max-w-lg px-3 font-lora text-lg font-medium italic leading-relaxed text-[#8F683F]"
+      >
+        "Hay momentos en la vida que merecen celebrarse de una manera
+        especial... y me encantaría compartir este con todos ustedes".
       </p>
 
       <!-- Sobre -->
@@ -38,7 +51,7 @@
         id="boton-apertura"
         type="button"
         aria-label="Abrir invitación"
-        class="group mt-1 cursor-pointer"
+        class="group mt-0 cursor-pointer"
       >
         <img
           src="images/sobre-dorado-E.S-2.png"
@@ -50,22 +63,13 @@
       </button>
 
       <!-- Indicador -->
-      <p class="font-lora text-xl italic text-[#C98B2E]">
+      <p class="mt-0 font-lora text-xl italic text-[#C98B2E]">
         Toca el sobre para abrir la invitación
       </p>
     </div>
 
-    <!-- Separador -->
-    <div class="mx-auto my-4 flex items-center justify-center gap-3">
-      <div class="h-px w-16 bg-[#C98B2E]/50"></div>
-
-      <span class="text-xl text-[#C98B2E]">✦</span>
-
-      <div class="h-px w-16 bg-[#C98B2E]/50"></div>
-    </div>
-
     <!-- Invitado -->
-    <div class="mt-1 text-center">
+    <!-- <div class="mt-1 text-center">
       <p
         id="nombre-invitado-apertura"
         class="mt-2 font-great-vibes text-4xl text-[#B87824]"
@@ -78,12 +82,10 @@
         class="mt-1.5 hidden font-lora text-xl text-[#B87824]/80"
       >
       </p>
-    </div>
-    ```
+    </div> -->
   </div>
 
   <!-- JavaScript -->
-
   <script>
     import { invitados } from "../data/invitados.js";
     import lanzarConfetti from "canvas-confetti";
@@ -120,7 +122,9 @@
       ) {
         const cantidad = invitadoSeleccionado.acompanantesPermitidos;
 
-        acompanantesElemento.textContent = `+ ${cantidad} ${cantidad === 1 ? "acompañante" : "acompañantes"}`;
+        acompanantesElemento.textContent = `+ ${cantidad} ${
+          cantidad === 1 ? "acompañante" : "acompañantes"
+        }`;
 
         acompanantesElemento.classList.remove("hidden");
       }
@@ -134,8 +138,8 @@
     const boton = document.getElementById("boton-apertura");
     const contenido = document.getElementById("contenido-invitacion");
 
-    let audioContext;
-    let audioBuffer;
+    let audioContext: AudioContext;
+    let audioBuffer: AudioBuffer;
 
     async function cargarSonido() {
       try {
@@ -203,12 +207,11 @@
             colors: [
               "#CC5F16",
               "#FFD166",
-              "#CC1627",
+              "#CC5f44",
               "#FF8FAB",
-              "#9B5DE5",
-              "#5F16CC",
-              "#83CC16",
-              "#16CCBA",
+
+              "#ffd187",
+
               "#FF9F1C",
             ],
           });
