@@ -10,6 +10,7 @@ const invitados = [
       { nombre: "Lautaro" },
     ],
   },
+
   {
     id: 2,
     nombre: "Flia Figueroa - Cardozo",
@@ -21,6 +22,7 @@ const invitados = [
       { nombre: "Valentina" },
     ],
   },
+
   {
     id: 3,
     nombre: "Flia Cardozo - Rodríguez",
@@ -33,6 +35,7 @@ const invitados = [
       { nombre: "Felipe" },
     ],
   },
+
   {
     id: 4,
     nombre: "Flia Bernachea - Cardozo",
@@ -43,24 +46,28 @@ const invitados = [
       { nombre: "Zoe" },
     ],
   },
+
   {
     id: 5,
     nombre: "Flia Mustafa - Tejerina",
     tipo: "familia",
     integrantes: [{ nombre: "Liliana" }, { nombre: "Jesús" }],
   },
+
   {
     id: 6,
     nombre: "Flia Cardozo - Cazón",
     tipo: "familia",
     integrantes: [{ nombre: "Osmar" }, { nombre: "Angelina" }],
   },
+
   {
     id: 7,
     nombre: "Flia Cardozo - Cazón",
     tipo: "familia",
     integrantes: [{ nombre: "Lionel" }, { nombre: "Lucila" }],
   },
+
   {
     id: 8,
     nombre: "Cardozo Romina y Flia",
@@ -68,6 +75,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Romina" }, { nombre: "Esteban" }],
   },
+
   {
     id: 9,
     nombre: "Flia Ortiz - Cardozo",
@@ -79,6 +87,7 @@ const invitados = [
       { nombre: "Guadalupe" },
     ],
   },
+
   {
     id: 10,
     nombre: "Flia Castro - Cardozo",
@@ -90,6 +99,7 @@ const invitados = [
       { nombre: "Alma" },
     ],
   },
+
   {
     id: 11,
     nombre: "Cardozo Belén",
@@ -97,6 +107,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Belén" }],
   },
+
   {
     id: 12,
     nombre: "Cardozo Leila",
@@ -104,6 +115,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Leila" }, { nombre: "Invitado" }],
   },
+
   {
     id: 13,
     nombre: "Cardozo Gonzalo",
@@ -111,6 +123,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Gonzalo" }, { nombre: "Invitado" }],
   },
+
   {
     id: 14,
     nombre: "Cardozo Rodrigo",
@@ -118,6 +131,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Rodrigo" }, { nombre: "Invitado" }],
   },
+
   {
     id: 15,
     nombre: "Señor Cazón Antonio",
@@ -125,6 +139,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Antonio" }],
   },
+
   {
     id: 16,
     nombre: "Alejandro Farfán y familia",
@@ -137,6 +152,7 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 17,
     nombre: "Miranda Elizabeth",
@@ -149,6 +165,7 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 18,
     nombre: "Flia Medrano - Mendoza",
@@ -159,6 +176,7 @@ const invitados = [
       { nombre: "Maximiliano" },
     ],
   },
+
   {
     id: 19,
     nombre: "Mendoza Jennifer",
@@ -166,6 +184,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Jennifer" }, { nombre: "Invitado" }],
   },
+
   {
     id: 20,
     nombre: "Cardozo Jorge",
@@ -173,6 +192,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Jorge" }, { nombre: "Invitado" }],
   },
+
   {
     id: 21,
     nombre: "Jaime Javier",
@@ -180,6 +200,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Javier" }, { nombre: "Invitado" }],
   },
+
   {
     id: 22,
     nombre: "Nadia Arias y Flia",
@@ -190,6 +211,7 @@ const invitados = [
       { nombre: "Gladys" },
     ],
   },
+
   {
     id: 23,
     nombre: "Cintia",
@@ -197,6 +219,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Cintia" }, { nombre: "Invitado" }],
   },
+
   {
     id: 24,
     nombre: "Leiva Hernán",
@@ -204,12 +227,14 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Hernán" }, { nombre: "Invitado" }],
   },
+
   {
     id: 25,
-    nombre: "Leiva Mateo - Solis Florencia",
+    nombre: "Leiva Mateo - Solís Florencia",
     tipo: "familia",
     integrantes: [{ nombre: "Mateo" }, { nombre: "Florencia" }],
   },
+
   {
     id: 26,
     nombre: "Leiva Paola y familia",
@@ -221,6 +246,7 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 27,
     nombre: "Leiva Agustín",
@@ -228,6 +254,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Agustín" }, { nombre: "Invitado" }],
   },
+
   {
     id: 28,
     nombre: "Teiera Dana - Wolter ",
@@ -235,6 +262,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Dana" }, { nombre: "Wolter" }],
   },
+
   {
     id: 29,
     nombre: "Flia Del Bianco - Leiva",
@@ -242,11 +270,12 @@ const invitados = [
     integrantes: [
       { nombre: "Victoria" },
       { nombre: "Uma" },
-      { nombre: "Elunei" },
+      { nombre: "Eluney" },
       { nombre: "Cataleya" },
       { nombre: "Bebé" },
     ],
   },
+
   {
     id: 30,
     nombre: "Leiva Tomás",
@@ -254,16 +283,18 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Tomás" }, { nombre: "Invitado" }],
   },
+
   {
     id: 31,
-    nombre: "Arguello Carolina y familia",
+    nombre: "Argüello Carolina y familia",
     tipo: "familia",
     integrantes: [
       { nombre: "Carolina" },
-      { nombre: "kiara" },
+      { nombre: "Kiara" },
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 32,
     nombre: "Jazmín",
@@ -271,6 +302,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Jazmín" }, { nombre: "Invitado" }],
   },
+
   {
     id: 33,
     nombre: "Leiva Sebastián",
@@ -278,6 +310,7 @@ const invitados = [
     invitado: true,
     integrantes: [{ nombre: "Sebastián" }, { nombre: "Invitado" }],
   },
+
   {
     id: 34,
     nombre: "Teiera Salverina",
@@ -285,6 +318,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Salverina" }],
   },
+
   {
     id: 35,
     nombre: "Flia Torres - Farfán",
@@ -296,24 +330,28 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 36,
     nombre: "Flia Cantero - Chaparro",
     tipo: "familia",
     integrantes: [{ nombre: "Cecilia" }, { nombre: "Ricardo" }],
   },
+
   {
     id: 37,
     nombre: "Flia Barraza - Reynoso",
     tipo: "familia",
     integrantes: [{ nombre: "Norma" }, { nombre: "Rafael" }],
   },
+
   {
     id: 38,
     nombre: "Flia Barraza - Barbosa",
     tipo: "familia",
     integrantes: [{ nombre: "Romina" }, { nombre: "Darío" }, { nombre: "Uma" }],
   },
+
   {
     id: 39,
     nombre: "Ayala Maia",
@@ -321,6 +359,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Maia" }],
   },
+
   {
     id: 40,
     nombre: "Torres Pilar",
@@ -328,6 +367,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Pilar" }],
   },
+
   {
     id: 41,
     nombre: "Barraza Priscila",
@@ -335,6 +375,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Priscila" }],
   },
+
   {
     id: 42,
     nombre: "García Dana",
@@ -342,6 +383,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Dana" }],
   },
+
   {
     id: 43,
     nombre: "Cantero Belén",
@@ -349,6 +391,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Belén" }],
   },
+
   {
     id: 44,
     nombre: "Romero Bárbara",
@@ -356,6 +399,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Bárbara" }],
   },
+
   {
     id: 45,
     nombre: "Benítez Iara",
@@ -363,6 +407,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Iara" }],
   },
+
   {
     id: 46,
     nombre: "Orte Caterín",
@@ -370,6 +415,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Caterín" }],
   },
+
   {
     id: 47,
     nombre: "Lagos Nicole",
@@ -377,6 +423,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Nicole" }],
   },
+
   {
     id: 48,
     nombre: "Lazarte Aarón",
@@ -384,6 +431,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Aarón" }],
   },
+
   {
     id: 49,
     nombre: "Ponce Tomás",
@@ -391,6 +439,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Tomás" }],
   },
+
   {
     id: 50,
     nombre: "Arévalo Lisandro",
@@ -398,6 +447,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Lisandro" }],
   },
+
   {
     id: 51,
     nombre: "Conca Juan",
@@ -405,6 +455,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Juan" }],
   },
+
   {
     id: 52,
     nombre: "Herrera David",
@@ -412,6 +463,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "David" }],
   },
+
   {
     id: 53,
     nombre: "Sánchez Tomás",
@@ -419,6 +471,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Tomás" }],
   },
+
   {
     id: 54,
     nombre: "Mereles Leandro",
@@ -426,6 +479,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Leandro" }],
   },
+
   {
     id: 55,
     nombre: "Bejer Tiziano",
@@ -433,6 +487,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Tiziano" }],
   },
+
   {
     id: 56,
     nombre: "Vallejos Benjamín",
@@ -440,6 +495,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Benjamín" }],
   },
+
   {
     id: 57,
     nombre: "Padula Francesca",
@@ -447,6 +503,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Francesca" }],
   },
+
   {
     id: 58,
     nombre: "Salto Victoria",
@@ -454,6 +511,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Victoria" }],
   },
+
   {
     id: 59,
     nombre: "Guardia Matías",
@@ -461,6 +519,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Matías" }],
   },
+
   {
     id: 60,
     nombre: "Asis Valentín",
@@ -468,6 +527,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Valentín" }],
   },
+
   {
     id: 61,
     nombre: "Sr. Vidal Cardozo",
@@ -475,6 +535,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Vidal Cardozo" }],
   },
+
   {
     id: 62,
     nombre: "Sra. Margarita Jaime",
@@ -482,26 +543,30 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Margarita Jaime" }],
   },
+
   {
     id: 63,
-    nombre: "Gomez Hassan",
+    nombre: "Gómez Hassan",
     tipo: "individual",
     invitado: true,
     integrantes: [{ nombre: "Hassan" }, { nombre: "Invitado" }],
   },
+
   {
     id: 64,
-    nombre: "Gomez Kevin",
+    nombre: "Gómez Kevin",
     tipo: "individual",
     invitado: true,
     integrantes: [{ nombre: "Kevin" }, { nombre: "Invitado" }],
   },
+
   {
     id: 65,
     nombre: "Hugo y Valeria y Flia.",
     tipo: "familia",
     integrantes: [{ nombre: "Hugo" }, { nombre: "Valeria" }],
   },
+
   {
     id: 66,
     nombre: "Farfán Marta",
@@ -509,6 +574,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Marta" }],
   },
+
   {
     id: 67,
     nombre: "Flia Urzagaste - Gutiérrez",
@@ -522,6 +588,7 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
   {
     id: 68,
     nombre: "Thiago Fleita ",
@@ -529,13 +596,15 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Valentín" }],
   },
+
   {
     id: 69,
-    nombre: "Luz Martinez",
+    nombre: "Luz Martínez",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Valentín" }],
   },
+
   {
     id: 70,
     nombre: "Agustín Andrada",
@@ -543,6 +612,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Valentín" }],
   },
+
   {
     id: 71,
     nombre: "Francesca Padula",
@@ -550,6 +620,7 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Valentín" }],
   },
+
   {
     id: 72,
     nombre: "Jason Silva",
