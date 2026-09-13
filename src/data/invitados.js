@@ -522,6 +522,41 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+  {
+    id: 68,
+    nombre: "Thiago Fleita ",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Valentín" }],
+  },
+  {
+    id: 69,
+    nombre: "Luz Martinez",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Valentín" }],
+  },
+  {
+    id: 70,
+    nombre: "Agustín Andrada",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Valentín" }],
+  },
+  {
+    id: 71,
+    nombre: "Francesca Padula",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Valentín" }],
+  },
+  {
+    id: 72,
+    nombre: "Jason Silva",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Valentín" }],
+  },
 ];
 
 export { invitados };
