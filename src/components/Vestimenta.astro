@@ -1,4 +1,4 @@
-<section class="relative w-full overflow-hidden bg-[#E7FCFA] px-6 pb-24 pt-16">
+<section class="relative w-full bg-[#E7FCFA] px-6 pb-24 pt-16">
   <div class="relative z-10 mx-auto w-full max-w-2xl text-center">
     <!-- Vestimenta -->
     <div class="mx-auto max-w-lg">
@@ -107,25 +107,19 @@
     </div>
   </div>
 
-  <!-- Curva inferior -->
-  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-    <svg
-      class="relative block h-[55px] w-full"
-      viewBox="0 0 1440 100"
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="
-          M0 50
-          C180 30 360 30 540 50
-          C720 70 900 70 1080 50
-          C1260 30 1350 35 1440 50
-          L1440 100
-          L0 100
-          Z
-        "
-        fill="#EFE7FC"></path>
-    </svg>
+  <div
+    class="absolute bottom-0 left-0 z-20 h-[80px] md:h-[130px] w-full translate-y-1/2 overflow-hidden pointer-events-none flex flex-col"
+  >
+    <!-- Mitad superior: Color arena -->
+    <div class="h-1/2 w-full bg-[#e7fcfa]"></div>
+    <!-- Mitad inferior: Color turquesa -->
+    <div class="h-1/2 w-full bg-[#efe7fc]"></div>
+
+    <!-- Imagen montada encima con fusión multiplicar -->
+    <img
+      src="/images/separador-ultimo.png"
+      alt="Separador floral"
+      class="absolute left-1/2 top-1/2 w-85 -translate-x-1/2 -translate-y-1/2 object-contain object-center mix-blend-multiply drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] md:w-[75%] lg:w-[65%] xl:w-[60%]"
+    />
   </div>
 </section>

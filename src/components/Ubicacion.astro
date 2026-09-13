@@ -1,5 +1,5 @@
 <section
-  class="relative flex w-full flex-col items-center overflow-hidden bg-[#FCFAE7] px-6 pb-24 pt-16"
+  class="relative flex w-full flex-col items-center bg-[#FCFAE7] px-6 pb-20 pt-16"
 >
   <!-- Contenido -->
   <div class="relative z-10 mx-auto w-full max-w-2xl text-center">
@@ -10,9 +10,7 @@
     <!-- Separador -->
     <div class="mx-auto my-8 flex items-center justify-center gap-3">
       <div class="h-px w-14 bg-[#C98B2E]/40"></div>
-
       <span class="text-lg text-[#C98B2E]">✦</span>
-
       <div class="h-px w-14 bg-[#C98B2E]/40"></div>
     </div>
 
@@ -23,7 +21,7 @@
       </h3>
 
       <p class="mt-5 font-lora italic text-xl font-medium text-[#8F683F]">
-        Del Tejar 6099–6197
+        Del Tejar 6113
       </p>
 
       <p
@@ -46,25 +44,23 @@
     </div>
   </div>
 
-  <!-- Curva inferior -->
-  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-    <svg
-      class="relative block h-[55px] w-full"
-      viewBox="0 0 1440 100"
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="
-          M0 50
-          C180 30 360 30 540 50
-          C720 70 900 70 1080 50
-          C1260 30 1350 35 1440 50
-          L1440 100
-          L0 100
-          Z
-        "
-        fill="#E7FCFA"></path>
-    </svg>
+  <!-- 2. SOLUCIÓN: Separador floral incrustado exactamente en el borde inferior -->
+  <div
+    class="absolute bottom-0 left-0 z-20 h-[90px] md:h-[110px] w-full translate-y-1/2 overflow-hidden pointer-events-none flex flex-col"
+  >
+    <!-- Mitad superior: Color arena -->
+    <div class="h-1/2 w-full bg-[#FCFAE7]"></div>
+    <!-- Mitad inferior: Color turquesa -->
+    <div class="h-1/2 w-full bg-[#E7FCFA]"></div>
+
+    <!-- Imagen montada encima con fusión multiplicar -->
+    <img
+      src="/images/imagen-cambiar-color.png"
+      alt="Separador floral"
+      class="absolute left-1/2 top-1/2 w-85 -translate-x-1/2 -translate-y-1/2 object-contain object-center mix-blend-multiply drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] md:w-[75%] lg:w-[65%] xl:w-[60%]"
+    />
   </div>
 </section>
+
+<!-- Aquí empezaría tu sección turquesa de abajo -->
+<!-- <section class="bg-[#TU-COLOR-TURQUESA] pt-12"> ... </section> -->
