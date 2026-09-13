@@ -257,7 +257,7 @@ const invitados = [
 
   {
     id: 28,
-    nombre: "Teiera Dana - Wolter ",
+    nombre: "Teiera Dana -Wolter Emiliano",
     tipo: "familia",
     invitado: true,
     integrantes: [{ nombre: "Dana" }, { nombre: "Wolter" }],
@@ -426,7 +426,7 @@ const invitados = [
 
   {
     id: 48,
-    nombre: "Lazarte Aarón",
+    nombre: "Lazarte Aaron",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Aarón" }],
