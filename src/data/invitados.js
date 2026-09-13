@@ -378,7 +378,7 @@ const invitados = [
 
   {
     id: 42,
-    nombre: "García Dana",
+    nombre: "García Danna",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Dana" }],
@@ -410,7 +410,7 @@ const invitados = [
 
   {
     id: 46,
-    nombre: "Orte Caterín",
+    nombre: "Orte Katherine",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Caterín" }],
@@ -434,7 +434,7 @@ const invitados = [
 
   {
     id: 49,
-    nombre: "Ponce Tomás",
+    nombre: "Ponce Thomás",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Tomás" }],
@@ -482,7 +482,7 @@ const invitados = [
 
   {
     id: 55,
-    nombre: "Bejer Tiziano",
+    nombre: "Veller Tiziano",
     tipo: "individual",
     invitado: false,
     integrantes: [{ nombre: "Tiziano" }],
