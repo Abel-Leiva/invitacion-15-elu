@@ -24,13 +24,14 @@ const HOJA_RESUMEN = "Resumen";
 const COLUMNAS = [
   "id",
   "nombre",
-  "modo",
-  "asistentes",
+  "asiste",
   "cantidad",
-  "extra",
+  "asistentes",
   "restricciones",
   "mesa",
   "actualizado",
+  "modo",
+  "extra",
 ];
 
 // ---------------------------------------------------------------------------
@@ -61,17 +62,18 @@ function doPost(e) {
         }
       }
 
-      const mesa = indice > 0 ? filas[indice - 1][7] : "";
+      const mesa = indice > 0 ? filas[indice - 1][6] : "";
       const fila = [
         Number(datos.id),
         String(datos.nombre || ""),
-        String(datos.modo || ""),
-        Array.isArray(datos.asistentes) ? datos.asistentes.join(", ") : "",
+        String(datos.asiste || (Number(datos.cantidad) > 0 ? "Sí" : "No")),
         Number(datos.cantidad) || 0,
-        Number(datos.extra) || 0,
+        Array.isArray(datos.asistentes) ? datos.asistentes.join(", ") : "",
         String(datos.restricciones || ""),
         mesa,
         ahora,
+        String(datos.modo || ""),
+        Number(datos.extra) || 0,
       ];
 
       if (indice > 0) {
@@ -104,16 +106,17 @@ function doGet(e) {
           ok: true,
           respuesta: {
             id: Number(fila[0]),
-            modo: String(fila[2] || ""),
-            asistentes: String(fila[3] || "")
+            asiste: String(fila[2] || ""),
+            cantidad: Number(fila[3]) || 0,
+            asistentes: String(fila[4] || "")
               .split(",")
               .map(function (nombre) {
                 return nombre.trim();
               })
               .filter(Boolean),
-            cantidad: Number(fila[4]) || 0,
-            restricciones: String(fila[6] || ""),
-            actualizado: String(fila[8] || ""),
+            restricciones: String(fila[5] || ""),
+            actualizado: String(fila[7] || ""),
+            modo: String(fila[8] || ""),
           },
         };
       }
@@ -174,8 +177,8 @@ function registrarCambio_(antes, despues, ahora) {
     ahora,
     despues[0],
     despues[1],
-    "cantidad " + antes[4] + " / extra " + antes[5],
-    "cantidad " + despues[4] + " / extra " + despues[5],
+    "cantidad " + antes[3] + " / extra " + antes[9],
+    "cantidad " + despues[3] + " / extra " + despues[9],
   ]);
 }
 
@@ -190,14 +193,17 @@ function setup() {
   if (!respuestas) respuestas = libro.insertSheet(HOJA_RESPUESTAS);
   if (respuestas.getLastRow() === 0) {
     respuestas.appendRow(COLUMNAS);
-    respuestas.setFrozenRows(1);
-    respuestas
-      .getRange(1, 1, 1, COLUMNAS.length)
-      .setFontWeight("bold")
-      .setBackground("#FCE7E9");
-    respuestas.setColumnWidth(4, 220);
-    respuestas.setColumnWidth(7, 220);
+  } else {
+    // Mantiene los encabezados alineados si cambió el orden de las columnas.
+    respuestas.getRange(1, 1, 1, COLUMNAS.length).setValues([COLUMNAS]);
   }
+  respuestas.setFrozenRows(1);
+  respuestas
+    .getRange(1, 1, 1, COLUMNAS.length)
+    .setFontWeight("bold")
+    .setBackground("#FCE7E9");
+  respuestas.setColumnWidth(4, 220);
+  respuestas.setColumnWidth(5, 220);
 
   let cambios = libro.getSheetByName(HOJA_CAMBIOS);
   if (!cambios) cambios = libro.insertSheet(HOJA_CAMBIOS);
@@ -220,11 +226,11 @@ function setup() {
       ["Extras fuera de cupo", null],
     ]);
     resumen.getRange("B2:B6").setFormulas([
-      ['=COUNTIF(Respuestas!F:F,">0")'],
-      ["=SUM(Respuestas!F:F)"],
-      ['=COUNTIF(Respuestas!F:F,0)'],
+      ['=COUNTIF(Respuestas!D:D,">0")'],
+      ["=SUM(Respuestas!D:D)"],
+      ['=COUNTIF(Respuestas!D:D,0)'],
       ["=MAX(0," + TOTAL_INVITADOS + "-COUNTA(Respuestas!A2:A))"],
-      ["=SUM(Respuestas!G:G)"],
+      ["=SUM(Respuestas!J:J)"],
     ]);
     resumen.setColumnWidth(1, 240);
   }

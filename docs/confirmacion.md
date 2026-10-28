@@ -81,11 +81,19 @@ Sin `.env` el formulario se ve, pero no guarda.
 
 Hoja **Respuestas**:
 
-`id | nombre | modo | asistentes | cantidad | extra | restricciones | mesa | actualizado`
+`id | nombre | asiste | cantidad | asistentes | restricciones | mesa | actualizado | modo | extra`
 
-- `cantidad` es el número que se usa para armar las mesas.
-- `extra` indica cuántas personas pasan el cupo original.
-- `mesa` la completás vos cuando armes las mesas.
+- `asiste`: **"Sí"** o **"No"**. Es la columna para mirar de un vistazo.
+- `cantidad`: cuántas personas van (`0` = no asiste nadie). Es el número para las mesas.
+- `asistentes`: nombres de quienes van. En los modos sin nombres se completa con
+  el nombre del invitado o "Acompañante"; en familias sin nombres queda vacío.
+- `restricciones`: lo que escribió el invitado.
+- `mesa`: la completás vos cuando armes las mesas.
+- `modo` y `extra`: técnicos (variante del formulario y cuántos superan el cupo).
+
+> Si ya habías ejecutado `setup()` con el orden anterior de columnas, borrá las
+> filas de datos (dejá solo la fila 1) y volvé a ejecutar `setup()` desde el
+> editor: los encabezados se reescriben solos.
 
 Hoja **Cambios**: historial de cada modificación (cantidad antes/después).
 

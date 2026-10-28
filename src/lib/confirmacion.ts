@@ -31,6 +31,7 @@ export type RespuestaConfirmacion = {
   asistentes: string[];
   cantidad: number;
   restricciones: string;
+  asiste: "Sí" | "No";
 };
 
 export type Validacion =
@@ -81,6 +82,30 @@ function limpiarTexto(valor: unknown, maximo: number): string {
   return valor.trim().slice(0, maximo);
 }
 
+function primerNombre(invitado: Invitado): string {
+  return invitado.integrantes[0]?.nombre.trim() || invitado.nombre.trim();
+}
+
+/**
+ * En los modos donde el invitado no escribe nombres, los completamos con lo
+ * que ya sabemos, así la planilla muestra quién asiste y no queda vacía.
+ */
+function asistentesDerivados(
+  invitado: Invitado,
+  modo: Modo,
+  cantidad: number,
+): string[] {
+  if (modo === "individual-solo") {
+    return cantidad >= 1 ? [primerNombre(invitado)] : [];
+  }
+
+  if (modo === "individual-acompanante") {
+    return [primerNombre(invitado), "Acompañante"].slice(0, cantidad);
+  }
+
+  return [];
+}
+
 /**
  * Valida y normaliza lo que llega del navegador.
  * Nunca confía en el cliente: recalcula modo, cupo y extra.
@@ -113,15 +138,22 @@ export function validarRespuesta(
 
   const restricciones = limpiarTexto(datos.restricciones, MAX_RESTRICCIONES);
   const cupo = getCupo(invitado);
+  const modo = getModo(invitado);
+
+  const asistentesFinales =
+    modo === "nombres"
+      ? asistentes
+      : asistentesDerivados(invitado, modo, cantidad);
 
   return {
     ok: true,
     respuesta: {
       id: invitado.id,
-      modo: getModo(invitado),
-      asistentes,
+      modo,
+      asistentes: asistentesFinales,
       cantidad,
       restricciones,
+      asiste: cantidad > 0 ? "Sí" : "No",
     },
     extra: Math.max(0, cantidad - cupo),
   };
