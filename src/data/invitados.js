@@ -591,10 +591,10 @@ const invitados = [
 
   {
     id: 68,
-    nombre: "Thiago Fleita ",
+    nombre: "Thiago Fleita",
     tipo: "individual",
     invitado: false,
-    integrantes: [{ nombre: "Valentín" }],
+    integrantes: [{ nombre: "Thiago" }],
   },
 
   {
@@ -602,7 +602,7 @@ const invitados = [
     nombre: "Luz Martínez",
     tipo: "individual",
     invitado: false,
-    integrantes: [{ nombre: "Valentín" }],
+    integrantes: [{ nombre: "Luz" }],
   },
 
   {
@@ -610,7 +610,7 @@ const invitados = [
     nombre: "Agustín Andrada",
     tipo: "individual",
     invitado: false,
-    integrantes: [{ nombre: "Valentín" }],
+    integrantes: [{ nombre: "Agustín" }],
   },
 
   {
@@ -618,7 +618,7 @@ const invitados = [
     nombre: "Francesca Padula",
     tipo: "individual",
     invitado: false,
-    integrantes: [{ nombre: "Valentín" }],
+    integrantes: [{ nombre: "Francesca" }],
   },
 
   {
@@ -626,7 +626,15 @@ const invitados = [
     nombre: "Jason Silva",
     tipo: "individual",
     invitado: false,
-    integrantes: [{ nombre: "Valentín" }],
+    integrantes: [{ nombre: "Jason" }],
+  },
+
+  {
+    id: 73,
+    nombre: "Sofía Barrera",
+    tipo: "individual",
+    invitado: false,
+    integrantes: [{ nombre: "Sofía" }],
   },
 ];
 
