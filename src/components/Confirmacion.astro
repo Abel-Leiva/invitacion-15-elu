@@ -569,9 +569,8 @@
     }
 
     function mostrarExito(total: number) {
-      raiz.textContent = "";
-
       const caja = el("div", "mt-2 text-center");
+
       caja.appendChild(
         el("p", "font-great-vibes text-4xl text-[#B87824]", "¡Gracias!"),
       );
@@ -590,10 +589,28 @@
         el(
           "p",
           "mt-4 font-lora text-sm italic text-[#8F683F]/80",
-          "Si algo cambia, volvé a este link.",
+          "Si algo cambia, podés cambiarlo cuando quieras.",
         ),
       );
 
+      const cambiar = el(
+        "button",
+        "mt-6 w-full rounded-sm border border-[#C98B2E]/40 px-4 py-3 font-lora text-base text-[#B87824] transition duration-200 active:scale-[0.99]",
+        "Cambiar mi respuesta",
+      );
+      cambiar.type = "button";
+      cambiar.addEventListener("click", () => {
+        caja.remove();
+        form.classList.remove("hidden");
+        previa = true;
+        interactuado = true;
+        actualizar();
+        raiz.scrollIntoView({ block: "center" });
+      });
+
+      caja.appendChild(cambiar);
+
+      form.classList.add("hidden");
       raiz.appendChild(caja);
     }
 
@@ -642,6 +659,7 @@
           restricciones: textarea.value,
         });
 
+        enviando = false;
         mostrarExito(total);
 
         const siguiente = document.getElementById("rsvp");
