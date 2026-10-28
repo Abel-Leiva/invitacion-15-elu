@@ -28,8 +28,10 @@ servidor.
 3. Borrá el contenido de `Código.gs` y pegá todo `docs/apps-script.js`.
 4. En la constante `SECRETO` poné un texto largo y aleatorio (por ejemplo el
    resultado de `openssl rand -hex 24`). Anotá ese valor.
-5. Ejecutá la función `setup` una vez (botón ▶). La primera vez Google pide
-   autorización: aceptá con la misma cuenta dueña de la planilla.
+5. (Opcional) Ejecutá la función `setup` una vez (botón ▶) para crear las tres
+   hojas de una vez. Si no lo hacés, el script las crea solo en el primer
+   guardado. La primera vez Google pide autorización: aceptá con la misma cuenta
+   dueña de la planilla.
 6. **Implementar → Nueva implementación → Tipo: Aplicación web**:
    - Descripción: `confirmaciones`
    - Ejecutar como: **Yo**
@@ -91,9 +93,10 @@ Hoja **Respuestas**:
 - `mesa`: la completás vos cuando armes las mesas.
 - `modo` y `extra`: técnicos (variante del formulario y cuántos superan el cupo).
 
-> Si ya habías ejecutado `setup()` con el orden anterior de columnas, borrá las
-> filas de datos (dejá solo la fila 1) y volvé a ejecutar `setup()` desde el
-> editor: los encabezados se reescriben solos.
+> Los encabezados se reparan solos en cada guardado: si el orden de columnas
+> cambia en el código, la próxima confirmación reescribe la fila 1. Las filas de
+> datos viejas hay que borrarlas a mano, porque no se pueden reacomodar sin
+> saber con qué versión se guardaron.
 
 Hoja **Cambios**: historial de cada modificación (cantidad antes/después).
 

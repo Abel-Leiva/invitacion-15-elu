@@ -162,7 +162,39 @@ function hojaRespuestas_() {
     setup();
     hoja = libro.getSheetByName(HOJA_RESPUESTAS);
   }
+  asegurarEncabezados_(hoja);
   return hoja;
+}
+
+/**
+ * Deja la fila 1 igual a COLUMNAS. Se llama en cada guardado, así que no hace
+ * falta correr setup() ni acordarse de hacerlo después de cambiar el código.
+ */
+function asegurarEncabezados_(hoja) {
+  const rango = hoja.getRange(1, 1, 1, COLUMNAS.length);
+  let actuales = [];
+
+  try {
+    actuales = rango.getValues()[0].map(function (valor) {
+      return String(valor);
+    });
+  } catch (error) {
+    actuales = [];
+  }
+
+  const coincide =
+    actuales.length === COLUMNAS.length &&
+    COLUMNAS.every(function (columna, indice) {
+      return actuales[indice] === columna;
+    });
+
+  if (coincide) return;
+
+  rango.setValues([COLUMNAS]);
+  rango.setFontWeight("bold").setBackground("#FCE7E9");
+  hoja.setFrozenRows(1);
+  hoja.setColumnWidth(4, 220);
+  hoja.setColumnWidth(5, 220);
 }
 
 function registrarCambio_(antes, despues, ahora) {
@@ -193,17 +225,8 @@ function setup() {
   if (!respuestas) respuestas = libro.insertSheet(HOJA_RESPUESTAS);
   if (respuestas.getLastRow() === 0) {
     respuestas.appendRow(COLUMNAS);
-  } else {
-    // Mantiene los encabezados alineados si cambió el orden de las columnas.
-    respuestas.getRange(1, 1, 1, COLUMNAS.length).setValues([COLUMNAS]);
   }
-  respuestas.setFrozenRows(1);
-  respuestas
-    .getRange(1, 1, 1, COLUMNAS.length)
-    .setFontWeight("bold")
-    .setBackground("#FCE7E9");
-  respuestas.setColumnWidth(4, 220);
-  respuestas.setColumnWidth(5, 220);
+  asegurarEncabezados_(respuestas);
 
   let cambios = libro.getSheetByName(HOJA_CAMBIOS);
   if (!cambios) cambios = libro.insertSheet(HOJA_CAMBIOS);
