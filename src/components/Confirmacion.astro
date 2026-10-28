@@ -1,3 +1,680 @@
-<section class="">
-  <h1 class="text-red-800">confirmacion</h1>
-</section>
+---
+---
+
+<div class="mx-auto max-w-lg">
+  <div class="flex items-center justify-center gap-2">
+    <h3 class="font-great-vibes text-4xl text-[#B87824]">
+      Confirmación de asistencia
+    </h3>
+    <img src="/icon/check.svg" alt="" class="mb-1 h-6 w-6" />
+  </div>
+
+  <!-- Separador -->
+  <div class="mx-auto my-7 flex items-center justify-center gap-3">
+    <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+    <span class="text-lg text-[#C98B2E]">✦</span>
+    <div class="h-px w-14 bg-[#C98B2E]/40"></div>
+  </div>
+
+  <p
+    class="font-lora text-xl font-medium italic leading-relaxed text-[#8F683F]"
+  >
+    Si podés, confirmá antes del 20/11.
+  </p>
+
+  <p
+    class="mt-3 font-lora text-base font-medium italic leading-relaxed text-[#8F683F]/80"
+  >
+    Podés cambiar tu respuesta cuando quieras.
+  </p>
+
+  <div id="rsvp" class="mt-8" aria-live="polite">
+    <p class="font-lora text-lg italic text-[#8F683F]/70">Cargando…</p>
+  </div>
+
+  <noscript>
+    <p class="mt-6 font-lora text-lg text-[#8F683F]">
+      Necesitás activar JavaScript para confirmar. Si no podés, avisanos por
+      WhatsApp.
+    </p>
+  </noscript>
+</div>
+
+<script>
+  import { invitados } from "../data/invitados.js";
+  import {
+    getCupo,
+    getModo,
+    getTope,
+    MAX_NOMBRE,
+    MAX_RESTRICCIONES,
+    type Invitado,
+    type Modo,
+    type RespuestaConfirmacion,
+  } from "../lib/confirmacion";
+
+  /**
+   * Número de WhatsApp de contacto, con código de país y sin "+" ni espacios.
+   * Ejemplo: "5491122334455". Si queda vacío, no se muestra el enlace.
+   */
+  const WHATSAPP = "";
+
+  const BOTON_PRINCIPAL =
+    "w-full rounded-sm border border-[#C98B2E] bg-[#C98B2E] px-6 py-4 font-lora text-base font-medium text-white transition duration-200 hover:bg-[#B87824] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60";
+
+  const BOTON_SECUNDARIO =
+    "w-full rounded-sm border px-4 py-3 font-lora text-base transition duration-200 active:scale-[0.99]";
+
+  type Fila = { nombre: string; asiste: boolean | null; extra: boolean };
+
+  function el<K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    className = "",
+    texto?: string,
+  ): HTMLElementTagNameMap[K] {
+    const nodo = document.createElement(tag);
+    if (className) nodo.className = className;
+    if (texto !== undefined) nodo.textContent = texto;
+    return nodo;
+  }
+
+  function enlaceWhatsApp(texto: string): string | null {
+    if (!WHATSAPP) return null;
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+  }
+
+  const raiz = document.getElementById("rsvp");
+  if (raiz) iniciar(raiz);
+
+  function iniciar(raiz: HTMLElement) {
+    const id = Number(new URLSearchParams(window.location.search).get("invitado"));
+    const invitado = (invitados as Invitado[]).find((item) => item.id === id);
+
+    if (!invitado) {
+      mostrarMensaje(
+        raiz,
+        "Para confirmar, abrí el link que te compartimos.",
+      );
+      return;
+    }
+
+    const modo: Modo = getModo(invitado);
+    const cupo = getCupo(invitado);
+    const tope = getTope(invitado);
+    const clave = `rsvp:${invitado.id}`;
+
+    const filas: Fila[] = invitado.integrantes.map((integrante) => ({
+      nombre: integrante.nombre,
+      asiste: null,
+      extra: false,
+    }));
+
+    let cantidad = 0;
+    let previa = false;
+    let interactuado = false;
+    let enviando = false;
+
+    // ---------- estructura ----------
+
+    raiz.textContent = "";
+
+    const form = el("div", "space-y-5 text-center");
+    const zona = el("div", "");
+    const campoRestricciones = el("div", "text-left");
+    const totalEl = el(
+      "p",
+      "hidden font-lora text-lg font-medium text-[#B87824]",
+      "",
+    );
+    const errorEl = el("p", "hidden font-lora text-sm text-[#B3261E]", "");
+    errorEl.setAttribute("role", "alert");
+
+    const botonEnviar = el("button", BOTON_PRINCIPAL, "Confirmar asistencia");
+    botonEnviar.type = "button";
+
+    const etiqueta = el(
+      "label",
+      "block font-lora text-base italic text-[#8F683F]",
+      "¿Alguna restricción alimentaria? (opcional)",
+    );
+    etiqueta.htmlFor = "rsvp-restricciones";
+
+    const textarea = el(
+      "textarea",
+      "mt-2 w-full resize-none rounded-sm border border-[#C98B2E]/30 bg-white/50 px-3 py-2 font-lora text-base text-[#8F683F] placeholder:text-[#8F683F]/50 focus:border-[#C98B2E] focus:outline-none",
+      "",
+    );
+    textarea.id = "rsvp-restricciones";
+    textarea.rows = 2;
+    textarea.maxLength = MAX_RESTRICCIONES;
+    textarea.placeholder = "Ej: celíaco, vegetariano…";
+    textarea.value = "";
+
+    campoRestricciones.append(etiqueta, textarea);
+    form.append(zona, campoRestricciones, totalEl, botonEnviar, errorEl);
+    raiz.appendChild(form);
+
+    // ---------- intro ----------
+
+    function encabezado(): HTMLElement {
+      if (modo === "nombres") {
+        return el(
+          "p",
+          "font-lora text-xl font-medium italic text-[#8F683F]",
+          "Marcá quiénes vienen.",
+        );
+      }
+
+      if (modo === "contador") {
+        const bloque = el("div", "space-y-1");
+        bloque.append(
+          el(
+            "p",
+            "font-lora text-xl font-medium italic text-[#8F683F]",
+            "¿Cuántos vienen?",
+          ),
+          el(
+            "p",
+            "font-lora text-base font-medium text-[#B87824]",
+            invitado.nombre,
+          ),
+        );
+        return bloque;
+      }
+
+      return el(
+        "p",
+        "font-lora text-xl font-medium italic text-[#8F683F]",
+        modo === "individual-acompanante" ? "¿Venís con alguien?" : "¿Venís a mis XV?",
+      );
+    }
+
+    // ---------- modo nombres ----------
+
+    function renderFilas() {
+      zona.textContent = "";
+      zona.appendChild(encabezado());
+
+      const lista = el("div", "mt-4 space-y-1");
+      zona.appendChild(lista);
+
+      filas.forEach((fila) => {
+        const contenedor = el("div", "flex items-center justify-between gap-3");
+        const grupo = el("div", "flex shrink-0 gap-2");
+
+        const si = el("button", "", "Sí");
+        si.type = "button";
+        si.setAttribute("aria-label", `Sí, asiste ${fila.nombre || "invitado"}`);
+
+        const no = el("button", "", "No");
+        no.type = "button";
+        no.setAttribute("aria-label", `No asiste ${fila.nombre || "invitado"}`);
+
+        if (fila.extra) {
+          const input = el(
+            "input",
+            "min-w-0 flex-1 border-b border-[#C98B2E]/30 bg-transparent px-1 py-1 font-lora text-base text-[#8F683F] placeholder:text-[#8F683F]/50 focus:border-[#C98B2E] focus:outline-none",
+            "",
+          );
+          input.type = "text";
+          input.placeholder = "Nombre (opcional)";
+          input.maxLength = MAX_NOMBRE;
+          input.value = fila.nombre;
+          input.setAttribute("aria-label", "Nombre de la persona agregada");
+          input.addEventListener("input", () => {
+            fila.nombre = input.value;
+          });
+          contenedor.appendChild(input);
+        } else {
+          contenedor.appendChild(
+            el("span", "truncate font-lora text-lg text-[#8F683F]", fila.nombre),
+          );
+        }
+
+        si.addEventListener("click", () => {
+          interactuado = true;
+          fila.asiste = true;
+          pintarToggle(si, true, "si");
+          pintarToggle(no, false, "no");
+          actualizar();
+        });
+
+        no.addEventListener("click", () => {
+          interactuado = true;
+          fila.asiste = false;
+          pintarToggle(si, false, "si");
+          pintarToggle(no, true, "no");
+          actualizar();
+        });
+
+        pintarToggle(si, fila.asiste === true, "si");
+        pintarToggle(no, fila.asiste === false, "no");
+
+        grupo.append(si, no);
+        contenedor.appendChild(grupo);
+        lista.appendChild(contenedor);
+      });
+
+      if (filas.length < tope) {
+        const agregar = el(
+          "button",
+          "mt-3 font-lora text-sm font-medium text-[#B87824] underline underline-offset-4",
+          "+ Agregar persona",
+        );
+        agregar.type = "button";
+        agregar.addEventListener("click", () => {
+          filas.push({ nombre: "", asiste: true, extra: true });
+          renderFilas();
+          actualizar();
+        });
+        zona.appendChild(agregar);
+      }
+    }
+
+    function pintarToggle(
+      boton: HTMLButtonElement,
+      activo: boolean,
+      tipo: "si" | "no",
+    ) {
+      const base =
+        "h-11 w-14 rounded-sm border font-lora text-sm font-medium transition duration-200 active:scale-95";
+
+      let estado: string;
+      if (activo && tipo === "si") {
+        estado = "border-[#C98B2E] bg-[#C98B2E] text-white";
+      } else if (activo && tipo === "no") {
+        estado = "border-[#8F683F] bg-[#8F683F] text-white";
+      } else {
+        estado = "border-[#C98B2E]/40 bg-white/40 text-[#B87824]";
+      }
+
+      boton.className = `${base} ${estado}`;
+      boton.setAttribute("aria-pressed", String(activo));
+    }
+
+    // ---------- modo contador ----------
+
+    function renderContador() {
+      zona.textContent = "";
+      zona.appendChild(encabezado());
+
+      const controles = el(
+        "div",
+        "mt-5 flex items-center justify-center gap-8",
+      );
+
+      const menos = el(
+        "button",
+        "h-12 w-12 rounded-full border border-[#C98B2E]/50 font-lora text-2xl text-[#B87824] transition active:scale-95 disabled:opacity-40",
+        "−",
+      );
+      menos.type = "button";
+      menos.setAttribute("aria-label", "Quitar una persona");
+
+      const numero = el(
+        "span",
+        "w-16 text-center font-serif text-4xl font-light text-[#B87824]",
+        String(cantidad),
+      );
+
+      const mas = el(
+        "button",
+        "h-12 w-12 rounded-full border border-[#C98B2E]/50 font-lora text-2xl text-[#B87824] transition active:scale-95 disabled:opacity-40",
+        "+",
+      );
+      mas.type = "button";
+      mas.setAttribute("aria-label", "Agregar una persona");
+
+      const pista = el(
+        "p",
+        "mt-1 font-lora text-sm italic text-[#8F683F]/70",
+        `(son ${cupo})`,
+      );
+
+      const nota = el(
+        "p",
+        "mt-3 font-lora text-sm italic text-[#8F683F]/70",
+        "No hace falta que pongas los nombres.",
+      );
+
+      function pintar() {
+        numero.textContent = String(cantidad);
+        menos.disabled = cantidad <= 0;
+        mas.disabled = cantidad >= tope;
+        actualizar();
+      }
+
+      menos.addEventListener("click", () => {
+        interactuado = true;
+        cantidad = Math.max(0, cantidad - 1);
+        pintar();
+      });
+
+      mas.addEventListener("click", () => {
+        interactuado = true;
+        cantidad = Math.min(tope, cantidad + 1);
+        pintar();
+      });
+
+      controles.append(menos, numero, mas);
+      zona.append(controles, pista, nota);
+      pintar();
+    }
+
+    // ---------- modo individual ----------
+
+    function renderOpciones() {
+      zona.textContent = "";
+      zona.appendChild(encabezado());
+
+      const opciones =
+        modo === "individual-acompanante"
+          ? [
+              { valor: 1, texto: "Voy sin acompañante" },
+              { valor: 2, texto: "Voy con acompañante" },
+              { valor: 0, texto: "No puedo ir" },
+            ]
+          : [
+              { valor: 1, texto: "Sí, voy a ir" },
+              { valor: 0, texto: "No puedo ir" },
+            ];
+
+      const lista = el("div", "mt-4 space-y-2");
+
+      opciones.forEach((opcion) => {
+        const boton = el("button", "", opcion.texto);
+        boton.type = "button";
+        boton.dataset.valor = String(opcion.valor);
+        boton.addEventListener("click", () => {
+          interactuado = true;
+          cantidad = opcion.valor;
+          pintarOpciones();
+          actualizar();
+        });
+        lista.appendChild(boton);
+      });
+
+      zona.appendChild(lista);
+
+      function pintarOpciones() {
+        lista.querySelectorAll("button").forEach((boton) => {
+          const valor = Number((boton as HTMLButtonElement).dataset.valor);
+          const activo = valor === cantidad;
+          boton.className = activo
+            ? `${BOTON_SECUNDARIO} border-[#C98B2E] bg-[#C98B2E] text-white`
+            : `${BOTON_SECUNDARIO} border-[#C98B2E]/40 bg-white/40 text-[#B87824]`;
+          boton.setAttribute("aria-pressed", String(activo));
+        });
+      }
+
+      pintarOpciones();
+      actualizar();
+    }
+
+    // ---------- estado ----------
+
+    function totalActual(): number {
+      return modo === "nombres"
+        ? filas.filter((fila) => fila.asiste === true).length
+        : cantidad;
+    }
+
+    function textoBoton(total: number): string {
+      if (enviando) return "Enviando…";
+      if (total === 0) return modo === "nombres" ? "No podemos ir" : "No puedo ir";
+      return previa ? "Actualizar" : "Confirmar asistencia";
+    }
+
+    function textoPendiente(): string {
+      if (modo === "nombres") return "Elegí quiénes vienen";
+      if (modo === "contador") return "Elegí cuántos vienen";
+      return "Elegí una opción";
+    }
+
+    function actualizar() {
+      const total = totalActual();
+      const listo = interactuado || total > 0;
+
+      botonEnviar.disabled = !listo || enviando;
+      botonEnviar.textContent = listo ? textoBoton(total) : textoPendiente();
+
+      if (modo === "nombres" && listo) {
+        totalEl.textContent = `Van ${total}`;
+        totalEl.classList.remove("hidden");
+      } else {
+        totalEl.classList.add("hidden");
+      }
+    }
+
+    // ---------- prellenado ----------
+
+    function aplicarPrevia(respuesta: RespuestaConfirmacion | null) {
+      if (!respuesta) return;
+
+      previa = true;
+      interactuado = true;
+
+      if (modo === "nombres") {
+        const pendientes = [...(respuesta.asistentes ?? [])];
+
+        filas.length = 0;
+        invitado.integrantes.forEach((integrante) => {
+          const indice = pendientes.findIndex(
+            (nombre) =>
+              nombre.toLowerCase() === integrante.nombre.toLowerCase(),
+          );
+          const asiste = indice >= 0;
+          if (asiste) pendientes.splice(indice, 1);
+          filas.push({ nombre: integrante.nombre, asiste, extra: false });
+        });
+
+        pendientes.forEach((nombre) => {
+          filas.push({ nombre, asiste: true, extra: true });
+        });
+
+        renderFilas();
+      } else {
+        cantidad = Number(respuesta.cantidad) || 0;
+      }
+
+      textarea.value = respuesta.restricciones ?? "";
+
+      if (modo === "contador") renderContador();
+      if (modo === "individual-solo" || modo === "individual-acompanante") {
+        renderOpciones();
+      }
+
+      actualizar();
+    }
+
+    // ---------- almacenamiento local ----------
+
+    function guardarLocal(datos: {
+      cantidad: number;
+      asistentes: string[];
+      restricciones: string;
+    }) {
+      try {
+        localStorage.setItem(clave, JSON.stringify(datos));
+      } catch {
+        // Sin almacenamiento: no es bloqueante.
+      }
+    }
+
+    function leerLocal(): RespuestaConfirmacion | null {
+      try {
+        const crudo = localStorage.getItem(clave);
+        if (!crudo) return null;
+        const datos = JSON.parse(crudo) as Partial<RespuestaConfirmacion>;
+        return {
+          id: invitado.id,
+          modo,
+          asistentes: Array.isArray(datos.asistentes) ? datos.asistentes : [],
+          cantidad: Number(datos.cantidad) || 0,
+          restricciones:
+            typeof datos.restricciones === "string" ? datos.restricciones : "",
+        };
+      } catch {
+        return null;
+      }
+    }
+
+    // ---------- mensajes ----------
+
+    function mostrarMensaje(
+      contenedor: HTMLElement,
+      texto: string,
+    ) {
+      contenedor.textContent = "";
+      contenedor.appendChild(
+        el(
+          "p",
+          "font-lora text-lg italic text-[#8F683F]",
+          texto,
+        ),
+      );
+
+      const enlace = enlaceWhatsApp("Hola, quiero confirmar mi asistencia a los XV.");
+      if (enlace) {
+        const ancla = el("a", "mt-3 inline-block font-lora text-base text-[#B87824] underline underline-offset-4", "Escribinos por WhatsApp");
+        ancla.href = enlace;
+        contenedor.appendChild(ancla);
+      }
+    }
+
+    function mostrarError() {
+      errorEl.textContent = "No pudimos guardar. Probá de nuevo.";
+
+      const enlace = enlaceWhatsApp(
+        `Hola, no pude confirmar desde la invitación (${invitado.nombre}).`,
+      );
+
+      if (enlace) {
+        errorEl.append(" ");
+        const ancla = el(
+          "a",
+          "underline underline-offset-4",
+          "Avisanos por WhatsApp.",
+        );
+        ancla.href = enlace;
+        errorEl.appendChild(ancla);
+      }
+
+      errorEl.classList.remove("hidden");
+    }
+
+    function ocultarError() {
+      errorEl.classList.add("hidden");
+      errorEl.textContent = "";
+    }
+
+    function mostrarExito(total: number) {
+      raiz.textContent = "";
+
+      const caja = el("div", "mt-2 text-center");
+      caja.appendChild(
+        el("p", "font-great-vibes text-4xl text-[#B87824]", "¡Gracias!"),
+      );
+
+      caja.appendChild(
+        el(
+          "p",
+          "mt-2 font-lora text-lg font-medium italic text-[#8F683F]",
+          total === 0
+            ? "Gracias por avisar. Te vamos a extrañar."
+            : "Los esperamos el 5 de diciembre.",
+        ),
+      );
+
+      caja.appendChild(
+        el(
+          "p",
+          "mt-4 font-lora text-sm italic text-[#8F683F]/80",
+          "Si algo cambia, volvé a este link.",
+        ),
+      );
+
+      raiz.appendChild(caja);
+    }
+
+    // ---------- envío ----------
+
+    async function enviar() {
+      if (enviando) return;
+
+      const total = totalActual();
+      const asistentes =
+        modo === "nombres"
+          ? filas
+              .filter((fila) => fila.asiste === true)
+              .map((fila) => fila.nombre.trim())
+              .filter((nombre) => nombre.length > 0)
+          : [];
+
+      enviando = true;
+      ocultarError();
+      botonEnviar.disabled = true;
+      botonEnviar.textContent = "Enviando…";
+
+      try {
+        const respuesta = await fetch("/api/confirmar", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            id: invitado.id,
+            cantidad: total,
+            asistentes,
+            restricciones: textarea.value,
+          }),
+        });
+
+        const datos = (await respuesta.json().catch(() => null)) as {
+          ok?: boolean;
+        } | null;
+
+        if (!respuesta.ok || !datos?.ok) {
+          throw new Error("El servidor no confirmó el guardado");
+        }
+
+        guardarLocal({
+          cantidad: total,
+          asistentes,
+          restricciones: textarea.value,
+        });
+
+        mostrarExito(total);
+
+        const siguiente = document.getElementById("rsvp");
+        if (siguiente) siguiente.scrollIntoView({ block: "center" });
+      } catch {
+        enviando = false;
+        botonEnviar.disabled = false;
+        actualizar();
+        mostrarError();
+      }
+    }
+
+    botonEnviar.addEventListener("click", enviar);
+
+    // ---------- arranque ----------
+
+    if (modo === "nombres") renderFilas();
+    if (modo === "contador") renderContador();
+    if (modo === "individual-solo" || modo === "individual-acompanante") {
+      renderOpciones();
+    }
+
+    actualizar();
+
+    aplicarPrevia(leerLocal());
+
+    fetch(`/api/confirmar?id=${invitado.id}`)
+      .then((respuesta) => (respuesta.ok ? respuesta.json() : null))
+      .then((datos) => {
+        if (datos?.ok && datos.respuesta) aplicarPrevia(datos.respuesta);
+      })
+      .catch(() => {
+        // Sin red o sin configuración: nos quedamos con lo local.
+      });
+  }
+</script>
