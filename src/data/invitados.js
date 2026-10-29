@@ -636,6 +636,38 @@ const invitados = [
     invitado: false,
     integrantes: [{ nombre: "Sofía" }],
   },
+
+  {
+    id: 74,
+    nombre: "Flia Gaspar - Prieto",
+    tipo: "familia",
+    integrantes: [
+      { nombre: "Milton" },
+      { nombre: "Cinthia" },
+      { nombre: "Mailen" },
+      { nombre: "Isabella" },
+    ],
+  },
+
+  {
+    id: 75,
+    nombre: "Gutiérrez Javier",
+    tipo: "individual",
+    invitado: true,
+    integrantes: [{ nombre: "Javier" }, { nombre: "Invitado" }],
+  },
+
+  {
+    id: 76,
+    nombre: "Flia Farfán",
+    tipo: "familia",
+    integrantes: [
+      { nombre: "Jennifer" },
+      { nombre: "Invitado" },
+      { nombre: "Invitado" },
+      { nombre: "Invitado" },
+    ],
+  },
 ];
 
 export { invitados };
