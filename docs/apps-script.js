@@ -14,9 +14,6 @@
 /** Debe ser idéntico a APPS_SCRIPT_SECRET en Vercel. Cambialo por algo largo. */
 const SECRETO = "CAMBIAR-ESTE-SECRETO";
 
-/** Cantidad de invitaciones cargadas en src/data/invitados.js (para el resumen). */
-const TOTAL_INVITADOS = 73;
-
 const HOJA_RESPUESTAS = "Respuestas";
 const HOJA_CAMBIOS = "Cambios";
 const HOJA_RESUMEN = "Resumen";
@@ -245,14 +242,14 @@ function setup() {
       ["Invitaciones confirmadas", null],
       ["Personas confirmadas", null],
       ["No asisten", null],
-      ["Sin responder", null],
+      ["Respondieron", null],
       ["Extras fuera de cupo", null],
     ]);
     resumen.getRange("B2:B6").setFormulas([
       ['=COUNTIF(Respuestas!D:D,">0")'],
       ["=SUM(Respuestas!D:D)"],
       ['=COUNTIF(Respuestas!D:D,0)'],
-      ["=MAX(0," + TOTAL_INVITADOS + "-COUNTA(Respuestas!A2:A))"],
+      ["=COUNTA(Respuestas!A2:A)"],
       ["=SUM(Respuestas!J:J)"],
     ]);
     resumen.setColumnWidth(1, 240);

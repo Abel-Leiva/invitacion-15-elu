@@ -100,8 +100,8 @@ Hoja **Respuestas**:
 
 Hoja **Cambios**: historial de cada modificación (cantidad antes/después).
 
-Hoja **Resumen**: totales automáticos (confirmaciones, personas, no asisten, sin
-responder, extras).
+Hoja **Resumen**: totales automáticos (confirmaciones, personas, no asisten,
+respondieron, extras).
 
 ## Ajustes frecuentes
 
@@ -110,7 +110,6 @@ responder, extras).
 | Fecha sugerida en el texto | `src/components/Confirmacion.astro` |
 | Tope de personas | `MAX_TOTAL` en `src/lib/confirmacion.ts` |
 | Número de WhatsApp de respaldo | constante `WHATSAPP` en `Confirmacion.astro` (formato `5491122334455`, sin `+` ni espacios) |
-| Cantidad de invitaciones del resumen | `TOTAL_INVITADOS` en `docs/apps-script.js` |
 
 ## Prueba manual
 
