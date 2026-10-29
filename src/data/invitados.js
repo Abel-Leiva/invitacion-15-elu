@@ -659,7 +659,7 @@ const invitados = [
 
   {
     id: 76,
-    nombre: "Flia Farfán",
+    nombre: "Jennifer Farfán y Flia",
     tipo: "familia",
     integrantes: [
       { nombre: "Jennifer" },
