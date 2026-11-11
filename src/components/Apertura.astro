@@ -204,7 +204,7 @@
 
         // 🎉 Confeti
         setTimeout(() => {
-          const confetti = lanzarConfetti({
+          lanzarConfetti({
             particleCount: 150,
             spread: 90,
             startVelocity: 40,
@@ -228,12 +228,10 @@
             ],
           });
 
-          // 🎵 Música 500 ms después de terminar el confeti
-          confetti?.then(() => {
-            setTimeout(() => {
-              window.dispatchEvent(new Event("musica-iniciar"));
-            }, 500);
-          });
+          // 🎵 La música entra junto con el confeti (no al terminar)
+          setTimeout(() => {
+            window.dispatchEvent(new Event("musica-iniciar"));
+          }, 250);
         }, 200);
       }, 900);
 
