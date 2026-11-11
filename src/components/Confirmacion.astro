@@ -87,9 +87,6 @@
     return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
   }
 
-  const raiz = document.getElementById("rsvp");
-  if (raiz) iniciar(raiz);
-
   // Cartel flotante de acceso rápido a la confirmación
   const cartel = document.getElementById("cartel-confirmar");
   const botonConfirmar = document.getElementById("boton-confirmar");
@@ -97,6 +94,7 @@
   const seccionConfirmacion = document.getElementById("confirmacion");
   let temporizadorCartel: number | undefined;
   let temporizadorAparicion: number | undefined;
+  let yaConfirmo = false;
 
   function ocultarCartel() {
     if (!cartel || cartel.classList.contains("hidden")) return;
@@ -108,6 +106,7 @@
 
   function mostrarCartel() {
     if (!cartel) return;
+    if (yaConfirmo) return; // ya confirmó: no necesita la ayuda
 
     cartel.classList.remove("hidden");
     void cartel.offsetWidth;
@@ -138,6 +137,9 @@
     evento.stopPropagation();
     ocultarCartel();
   });
+
+  const raiz = document.getElementById("rsvp");
+  if (raiz) iniciar(raiz);
 
   function iniciar(raiz: HTMLElement) {
     const id = Number(new URLSearchParams(window.location.search).get("invitado"));
@@ -569,6 +571,7 @@
 
       previa = true;
       interactuado = true;
+      yaConfirmo = true;
 
       if (modo === "nombres") {
         const pendientes = [...(respuesta.asistentes ?? [])];
@@ -598,6 +601,7 @@
       avisoTitulo.textContent = mensajePrevio(Number(respuesta.cantidad) || 0);
       aviso.classList.remove("hidden");
       document.getElementById("rsvp-intro")?.classList.add("hidden");
+      ocultarCartel();
 
       if (modo === "contador") renderContador();
       if (modo === "individual-solo" || modo === "individual-acompanante") {
