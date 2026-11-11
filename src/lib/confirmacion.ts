@@ -29,6 +29,7 @@ export type RespuestaConfirmacion = {
   id: number;
   modo: Modo;
   asistentes: string[];
+  noAsisten: string[];
   cantidad: number;
   restricciones: string;
   asiste: "Sí" | "No";
@@ -140,6 +141,14 @@ export function validarRespuesta(
   const cupo = getCupo(invitado);
   const modo = getModo(invitado);
 
+  const noAsisten =
+    modo === "nombres" && Array.isArray(datos.noAsisten)
+      ? datos.noAsisten
+          .map((nombre) => limpiarTexto(nombre, MAX_NOMBRE))
+          .filter((nombre) => nombre.length > 0)
+          .slice(0, MAX_ASISTENTES)
+      : [];
+
   const asistentesFinales =
     modo === "nombres"
       ? asistentes
@@ -151,6 +160,7 @@ export function validarRespuesta(
       id: invitado.id,
       modo,
       asistentes: asistentesFinales,
+      noAsisten,
       cantidad,
       restricciones,
       asiste: cantidad > 0 ? "Sí" : "No",

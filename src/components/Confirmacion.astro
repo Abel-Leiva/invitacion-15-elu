@@ -627,6 +627,13 @@
               .map((fila) => fila.nombre.trim())
               .filter((nombre) => nombre.length > 0)
           : [];
+      const noAsisten =
+        modo === "nombres"
+          ? filas
+              .filter((fila) => fila.asiste === false)
+              .map((fila) => fila.nombre.trim())
+              .filter((nombre) => nombre.length > 0)
+          : [];
 
       enviando = true;
       ocultarError();
@@ -641,6 +648,7 @@
             id: invitado.id,
             cantidad: total,
             asistentes,
+            noAsisten,
             restricciones: textarea.value,
           }),
         });
