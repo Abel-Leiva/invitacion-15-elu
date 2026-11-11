@@ -45,10 +45,19 @@
 <button
   id="boton-confirmar"
   type="button"
-  aria-label="Ir a la confirmación de asistencia"
-  class="fixed bottom-6 left-6 z-40 flex items-center gap-2 rounded-full border border-[#C98B2E] bg-[#C98B2E] px-5 py-3 font-lora text-sm font-medium text-white shadow-lg transition hover:scale-105 active:scale-95"
+  aria-label="Ya podés confirmar tu asistencia"
+  class="fixed bottom-6 left-4 z-40 rounded-md border border-[#C98B2E]/40 bg-[#FCFAE7]/95 px-5 py-3 text-center shadow-[0_4px_14px_rgba(143,104,63,0.18)] backdrop-blur transition duration-300 hover:border-[#C98B2E] hover:shadow-[0_6px_18px_rgba(143,104,63,0.3)] active:scale-95"
 >
-  Confirmar
+  <span class="block font-great-vibes text-2xl leading-none text-[#B87824]">
+    Ya podés confirmar
+  </span>
+  <span
+    class="mt-1.5 flex items-center justify-center gap-2 font-lora text-[11px] uppercase tracking-[0.25em] text-[#8F683F]/80"
+  >
+    <span class="h-px w-5 bg-[#C98B2E]/40"></span>
+    tu asistencia
+    <span class="h-px w-5 bg-[#C98B2E]/40"></span>
+  </span>
 </button>
 
 <script>
@@ -147,6 +156,8 @@
       asiste: null,
       extra: false,
     }));
+
+    const filasEl: HTMLElement[] = [];
 
     let cantidad = 0;
     let previa = false;
@@ -256,8 +267,11 @@
       const lista = el("div", "mt-4 space-y-1");
       zona.appendChild(lista);
 
+      filasEl.length = 0;
+
       filas.forEach((fila) => {
         const contenedor = el("div", "flex items-center justify-between gap-3");
+        filasEl.push(contenedor);
         const grupo = el("div", "flex shrink-0 gap-2");
 
         const si = el("button", "", "Sí");
@@ -292,6 +306,8 @@
         si.addEventListener("click", () => {
           interactuado = true;
           fila.asiste = true;
+          contenedor.classList.remove("bg-[#C98B2E]/10", "rounded-sm");
+          ocultarError();
           pintarToggle(si, true, "si");
           pintarToggle(no, false, "no");
           actualizar();
@@ -300,6 +316,8 @@
         no.addEventListener("click", () => {
           interactuado = true;
           fila.asiste = false;
+          contenedor.classList.remove("bg-[#C98B2E]/10", "rounded-sm");
+          ocultarError();
           pintarToggle(si, false, "si");
           pintarToggle(no, true, "no");
           actualizar();
@@ -494,8 +512,7 @@
       return "Elegí una opción";
     }
 
-    function mensajePrevio(cantidad: number): string {
-      if (cantidad === 0) {
+    function mensajePrevio(cantidad: number): string {      if (cantidad === 0) {
         return modo === "individual-solo"
           ? "Ya nos avisaste que no vas a poder venir."
           : "Ya nos avisaste que no van a poder venir.";
@@ -504,6 +521,25 @@
       if (modo === "individual-solo") return "Ya nos confirmaste que venís.";
       if (cantidad === 1) return "Ya nos confirmaste que va 1 persona.";
       return `Ya nos confirmaste que van ${cantidad}.`;
+    }
+
+    function mostrarPendientes() {
+      filasEl.forEach((nodo, indice) => {
+        const pendiente = filas[indice]?.asiste === null;
+        nodo.classList.toggle("bg-[#C98B2E]/10", pendiente);
+        nodo.classList.toggle("rounded-sm", pendiente);
+      });
+
+      const nombres = filas
+        .filter((fila) => fila.asiste === null)
+        .map((fila) => fila.nombre.trim() || "una persona");
+
+      errorEl.textContent =
+        nombres.length === 1
+          ? `Falta marcar a ${nombres[0]}.`
+          : `Falta marcar a ${listarNombres(nombres)}.`;
+
+      errorEl.classList.remove("hidden");
     }
 
     function actualizar() {
@@ -791,6 +827,11 @@
 
     async function enviar() {
       if (enviando) return;
+
+      if (modo === "nombres" && filas.some((fila) => fila.asiste === null)) {
+        mostrarPendientes();
+        return;
+      }
 
       const total = totalActual();
       const asistentes =
