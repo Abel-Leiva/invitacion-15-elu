@@ -83,7 +83,10 @@ Sin `.env` el formulario se ve, pero no guarda.
 
 Hoja **Respuestas**:
 
-`id | nombre | asiste | cantidad | asistentes | restricciones | mesa | actualizado | modo | extra | no_asisten`
+`N° invitación | nombre | asiste | cantidad | asistentes | restricciones | mesa | actualizado | modo | extra | no_asisten`
+
+- `N° invitación`: el número que va en el link (`?invitado=74`). Sirve para
+  identificar la invitación aunque haya apellidos parecidos.
 
 - `asiste`: **"Sí"** o **"No"**. Es la columna para mirar de un vistazo.
 - `cantidad`: cuántas personas van (`0` = no asiste nadie). Es el número para las mesas.

@@ -19,7 +19,7 @@ const HOJA_CAMBIOS = "Cambios";
 const HOJA_RESUMEN = "Resumen";
 
 const COLUMNAS = [
-  "id",
+  "N° invitación",
   "nombre",
   "asiste",
   "cantidad",
