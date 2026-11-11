@@ -1,7 +1,7 @@
 ---
 ---
 
-<div class="mx-auto max-w-lg">
+<div id="confirmacion" class="mx-auto max-w-lg">
   <div class="flex items-center justify-center gap-2">
     <h3 class="font-great-vibes text-4xl text-[#B87824]">
       Confirmación de asistencia
@@ -41,6 +41,15 @@
     </p>
   </noscript>
 </div>
+
+<button
+  id="boton-confirmar"
+  type="button"
+  aria-label="Ir a la confirmación de asistencia"
+  class="fixed bottom-6 left-6 z-40 flex items-center gap-2 rounded-full border border-[#C98B2E] bg-[#C98B2E] px-5 py-3 font-lora text-sm font-medium text-white shadow-lg transition hover:scale-105 active:scale-95"
+>
+  Confirmar
+</button>
 
 <script>
   import { invitados } from "../data/invitados.js";
@@ -87,6 +96,34 @@
 
   const raiz = document.getElementById("rsvp");
   if (raiz) iniciar(raiz);
+
+  // Botón flotante que lleva a la sección de confirmación
+  const botonConfirmar = document.getElementById("boton-confirmar");
+  const seccionConfirmacion = document.getElementById("confirmacion");
+
+  if (botonConfirmar && seccionConfirmacion) {
+    botonConfirmar.addEventListener("click", () => {
+      if (typeof seccionConfirmacion.scrollIntoView === "function") {
+        seccionConfirmacion.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((entrada) => {
+            botonConfirmar.classList.toggle("hidden", entrada.isIntersecting);
+          });
+        },
+        { threshold: 0.15 },
+      );
+
+      observador.observe(seccionConfirmacion);
+    }
+  }
 
   function iniciar(raiz: HTMLElement) {
     const id = Number(new URLSearchParams(window.location.search).get("invitado"));
