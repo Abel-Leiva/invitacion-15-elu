@@ -83,7 +83,10 @@ Sin `.env` el formulario se ve, pero no guarda.
 
 Hoja **Respuestas**:
 
-`id | nombre | asiste | cantidad | asistentes | restricciones | mesa | actualizado | modo | extra`
+`N° invitación | nombre | asiste | cantidad | asistentes | restricciones | mesa | actualizado | modo | extra | no_asisten`
+
+- `N° invitación`: el número que va en el link (`?invitado=74`). Sirve para
+  identificar la invitación aunque haya apellidos parecidos.
 
 - `asiste`: **"Sí"** o **"No"**. Es la columna para mirar de un vistazo.
 - `cantidad`: cuántas personas van (`0` = no asiste nadie). Es el número para las mesas.
@@ -91,6 +94,8 @@ Hoja **Respuestas**:
   el nombre del invitado o "Acompañante"; en familias sin nombres queda vacío.
 - `restricciones`: lo que escribió el invitado.
 - `mesa`: la completás vos cuando armes las mesas.
+- `no_asisten`: nombres de quienes fueron marcados como "No" (solo en familias
+  con nombres). Sirve para detectar errores antes de cerrar el número.
 - `modo` y `extra`: técnicos (variante del formulario y cuántos superan el cupo).
 
 > Los encabezados se reparan solos en cada guardado: si el orden de columnas

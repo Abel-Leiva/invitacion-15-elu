@@ -19,7 +19,7 @@ const HOJA_CAMBIOS = "Cambios";
 const HOJA_RESUMEN = "Resumen";
 
 const COLUMNAS = [
-  "id",
+  "N° invitación",
   "nombre",
   "asiste",
   "cantidad",
@@ -29,6 +29,7 @@ const COLUMNAS = [
   "actualizado",
   "modo",
   "extra",
+  "no_asisten",
 ];
 
 // ---------------------------------------------------------------------------
@@ -71,6 +72,7 @@ function doPost(e) {
         ahora,
         String(datos.modo || ""),
         Number(datos.extra) || 0,
+        Array.isArray(datos.noAsisten) ? datos.noAsisten.join(", ") : "",
       ];
 
       if (indice > 0) {
@@ -114,6 +116,12 @@ function doGet(e) {
             restricciones: String(fila[5] || ""),
             actualizado: String(fila[7] || ""),
             modo: String(fila[8] || ""),
+            noAsisten: String(fila[10] || "")
+              .split(",")
+              .map(function (nombre) {
+                return nombre.trim();
+              })
+              .filter(Boolean),
           },
         };
       }
