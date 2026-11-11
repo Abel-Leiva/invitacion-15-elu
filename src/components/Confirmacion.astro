@@ -52,6 +52,7 @@
     getTope,
     MAX_NOMBRE,
     MAX_RESTRICCIONES,
+    NOMBRE_INVITADO,
     type Invitado,
     type Modo,
     type RespuestaConfirmacion,
@@ -153,16 +154,19 @@
       return;
     }
 
-    const modo: Modo = getModo(invitado);
+    let modo: Modo = getModo(invitado);
     const cupo = getCupo(invitado);
     const tope = getTope(invitado);
     const clave = `rsvp:${invitado.id}`;
 
-    const filas: Fila[] = invitado.integrantes.map((integrante) => ({
-      nombre: integrante.nombre,
-      asiste: null,
-      extra: false,
-    }));
+    const filas: Fila[] = invitado.integrantes.map((integrante) => {
+      const esPlaceholder = integrante.nombre.trim() === NOMBRE_INVITADO;
+      return {
+        nombre: esPlaceholder ? "" : integrante.nombre,
+        asiste: null,
+        extra: esPlaceholder,
+      };
+    });
 
     const filasEl: HTMLElement[] = [];
 
@@ -573,18 +577,31 @@
       interactuado = true;
       yaConfirmo = true;
 
+      // Compatibilidad: si la respuesta se guardó en modo contador, seguimos
+      // mostrando el contador aunque la invitación ahora use filas.
+      if (respuesta.modo === "contador" && modo !== "contador") {
+        modo = "contador";
+      }
+
       if (modo === "nombres") {
         const pendientes = [...(respuesta.asistentes ?? [])];
 
         filas.length = 0;
         invitado.integrantes.forEach((integrante) => {
-          const indice = pendientes.findIndex(
-            (nombre) =>
-              nombre.toLowerCase() === integrante.nombre.toLowerCase(),
-          );
+          const esPlaceholder = integrante.nombre.trim() === NOMBRE_INVITADO;
+          const indice = esPlaceholder
+            ? -1
+            : pendientes.findIndex(
+                (nombre) =>
+                  nombre.toLowerCase() === integrante.nombre.toLowerCase(),
+              );
           const asiste = indice >= 0;
           if (asiste) pendientes.splice(indice, 1);
-          filas.push({ nombre: integrante.nombre, asiste, extra: false });
+          filas.push({
+            nombre: esPlaceholder ? "" : integrante.nombre,
+            asiste,
+            extra: esPlaceholder,
+          });
         });
 
         pendientes.forEach((nombre) => {
@@ -619,7 +636,7 @@
       restricciones: string;
     }) {
       try {
-        localStorage.setItem(clave, JSON.stringify(datos));
+        localStorage.setItem(clave, JSON.stringify({ ...datos, modo }));
       } catch {
         // Sin almacenamiento: no es bloqueante.
       }
@@ -632,11 +649,13 @@
         const datos = JSON.parse(crudo) as Partial<RespuestaConfirmacion>;
         return {
           id: invitado.id,
-          modo,
+          modo: datos.modo ?? modo,
           asistentes: Array.isArray(datos.asistentes) ? datos.asistentes : [],
+          noAsisten: Array.isArray(datos.noAsisten) ? datos.noAsisten : [],
           cantidad: Number(datos.cantidad) || 0,
           restricciones:
             typeof datos.restricciones === "string" ? datos.restricciones : "",
+          asiste: Number(datos.cantidad) > 0 ? "Sí" : "No",
         };
       } catch {
         return null;

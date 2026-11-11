@@ -68,8 +68,10 @@ Sin `.env` el formulario se ve, pero no guarda.
 
 - La invitación se identifica con `?invitado=<id>` (los links ya compartidos).
 - El formulario elige una de cuatro variantes según los datos del invitado:
-  - `nombres`: familia con todos los nombres cargados → Sí/No por persona.
-  - `contador`: familia con integrantes sin nombre → contador, sin pedir nombres.
+  - `nombres`: familia con al menos un nombre cargado → Sí/No por persona. Los
+    integrantes sin nombre aparecen como un campo "Nombre (opcional)".
+  - `contador`: familia con **todos** los integrantes sin nombre, o con un tope
+    propio → contador, sin pedir nombres.
   - `individual-solo`: una persona → "Sí, voy a ir" / "No puedo ir".
   - `individual-acompanante`: una persona + acompañante sin nombre.
 - Las respuestas se pueden modificar en cualquier momento: no hay fecha límite.
