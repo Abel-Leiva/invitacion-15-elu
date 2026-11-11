@@ -24,36 +24,19 @@
     musica.volume = VOLUMEN;
   }
 
-  function subirVolumen(duracion = 1200) {
-    if (!musica) return;
-
-    const inicio = performance.now();
-
-    const paso = (ahora: number) => {
-      if (!musica) return;
-      const avance = Math.min(1, (ahora - inicio) / duracion);
-      musica.volume = VOLUMEN * avance;
-      if (avance < 1) requestAnimationFrame(paso);
-    };
-
-    requestAnimationFrame(paso);
-  }
-
   // La música comienza únicamente cuando Apertura lo indique
   window.addEventListener("musica-iniciar", async () => {
     if (!musica) return;
 
     try {
-      musica.volume = 0;
+      musica.volume = VOLUMEN;
       await musica.play();
-      subirVolumen();
 
       if (boton) {
         boton.textContent = "❚❚";
         boton.setAttribute("aria-label", "Pausar música");
       }
     } catch (error) {
-      musica.volume = VOLUMEN;
       console.error("No se pudo reproducir la música:", error);
     }
   });
@@ -62,7 +45,6 @@
     if (!musica) return;
 
     if (musica.paused) {
-      if (musica.volume < 0.05) musica.volume = VOLUMEN;
       await musica.play();
 
       boton.textContent = "❚❚";
