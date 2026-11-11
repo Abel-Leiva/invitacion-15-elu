@@ -237,6 +237,7 @@
 
       setTimeout(() => {
         apertura?.remove();
+        window.dispatchEvent(new Event("invitacion-abierta"));
       }, 1000);
     });
   </script>

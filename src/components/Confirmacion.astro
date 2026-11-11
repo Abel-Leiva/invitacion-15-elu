@@ -90,22 +90,54 @@
   const raiz = document.getElementById("rsvp");
   if (raiz) iniciar(raiz);
 
-  // Cartel de acceso rápido a la confirmación
+  // Cartel flotante de acceso rápido a la confirmación
+  const cartel = document.getElementById("cartel-confirmar");
   const botonConfirmar = document.getElementById("boton-confirmar");
+  const cerrarCartel = document.getElementById("cerrar-cartel");
   const seccionConfirmacion = document.getElementById("confirmacion");
+  let temporizadorCartel: number | undefined;
+  let temporizadorAparicion: number | undefined;
 
-  if (botonConfirmar && seccionConfirmacion) {
-    botonConfirmar.addEventListener("click", (evento) => {
-      evento.preventDefault();
+  function ocultarCartel() {
+    if (!cartel || cartel.classList.contains("hidden")) return;
 
-      if (typeof seccionConfirmacion.scrollIntoView === "function") {
-        seccionConfirmacion.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    });
+    window.clearTimeout(temporizadorCartel);
+    cartel.classList.add("opacity-0");
+    window.setTimeout(() => cartel.classList.add("hidden"), 500);
   }
+
+  function mostrarCartel() {
+    if (!cartel) return;
+
+    cartel.classList.remove("hidden");
+    void cartel.offsetWidth;
+    cartel.classList.remove("opacity-0");
+    temporizadorCartel = window.setTimeout(ocultarCartel, 15000);
+  }
+
+  window.addEventListener("invitacion-abierta", () => {
+    window.clearTimeout(temporizadorAparicion);
+    temporizadorAparicion = window.setTimeout(mostrarCartel, 2000);
+  });
+
+  botonConfirmar?.addEventListener("click", () => {
+    if (
+      seccionConfirmacion &&
+      typeof seccionConfirmacion.scrollIntoView === "function"
+    ) {
+      seccionConfirmacion.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+
+    ocultarCartel();
+  });
+
+  cerrarCartel?.addEventListener("click", (evento) => {
+    evento.stopPropagation();
+    ocultarCartel();
+  });
 
   function iniciar(raiz: HTMLElement) {
     const id = Number(new URLSearchParams(window.location.search).get("invitado"));

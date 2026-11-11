@@ -12,6 +12,38 @@ import Vestimenta from "./Vestimenta.astro";
 >
   <Musica />
 
+  <div
+    id="cartel-confirmar"
+    class="fixed inset-x-0 top-0 z-40 hidden border-b border-[#C98B2E]/30 bg-[#E7FCFA] shadow-[0_4px_16px_rgba(143,104,63,0.18)] transition-opacity duration-500"
+  >
+    <button
+      id="boton-confirmar"
+      type="button"
+      aria-label="Ya podés confirmar tu asistencia"
+      class="flex w-full flex-col items-center px-14 py-3 text-center"
+    >
+      <span class="font-great-vibes text-2xl leading-tight text-[#B87824]">
+        Ya podés confirmar tu asistencia
+      </span>
+      <span
+        class="mt-0.5 flex items-center justify-center gap-2 font-lora text-[10px] uppercase tracking-[0.25em] text-[#8F683F]/70"
+      >
+        <span class="h-px w-5 bg-[#C98B2E]/40"></span>
+        Tocá acá
+        <span class="h-px w-5 bg-[#C98B2E]/40"></span>
+      </span>
+    </button>
+
+    <button
+      id="cerrar-cartel"
+      type="button"
+      aria-label="Cerrar aviso"
+      class="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-lg text-[#8F683F]/70 transition hover:bg-[#C98B2E]/15"
+    >
+      ✕
+    </button>
+  </div>
+
   <InformacionEvento />
 
   <Ubicacion />
