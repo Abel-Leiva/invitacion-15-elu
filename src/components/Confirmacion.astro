@@ -357,7 +357,12 @@
       });
 
       controles.append(menos, numero, mas);
-      zona.append(controles, pista, nota);
+      zona.appendChild(controles);
+
+      // Solo mostramos "(son N)" cuando el número es conocido.
+      if (!invitado.tope) zona.appendChild(pista);
+
+      zona.appendChild(nota);
       pintar();
     }
 

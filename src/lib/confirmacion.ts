@@ -23,6 +23,7 @@ export type Invitado = {
   nombre: string;
   tipo: "familia" | "individual";
   invitado?: boolean;
+  tope?: number;
   integrantes: Integrante[];
 };
 
@@ -74,8 +75,11 @@ export function getModo(invitado: Invitado): Modo {
   return "nombres";
 }
 
-/** Tope real de personas: nunca menos que el cupo ya cargado. */
+/** Tope real de personas: respeta el tope propio si la invitación lo define. */
 export function getTope(invitado: Invitado): number {
+  if (typeof invitado.tope === "number" && invitado.tope > 0) {
+    return invitado.tope;
+  }
   return Math.max(MAX_TOTAL, getCupo(invitado));
 }
 
@@ -166,6 +170,6 @@ export function validarRespuesta(
       restricciones,
       asiste: cantidad > 0 ? "Sí" : "No",
     },
-    extra: Math.max(0, cantidad - cupo),
+    extra: invitado.tope ? 0 : Math.max(0, cantidad - cupo),
   };
 }

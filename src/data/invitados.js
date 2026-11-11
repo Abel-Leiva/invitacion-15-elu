@@ -668,6 +668,18 @@ const invitados = [
       { nombre: "Invitado" },
     ],
   },
+
+  {
+    id: 77,
+    nombre: "Tía Lidia y Flia",
+    tipo: "familia",
+    tope: 8,
+    integrantes: [
+      { nombre: "Lidia" },
+      { nombre: "Invitado" },
+      { nombre: "Invitado" },
+    ],
+  },
 ];
 
 export { invitados };
