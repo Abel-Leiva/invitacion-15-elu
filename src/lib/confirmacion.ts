@@ -7,6 +7,7 @@
 export const MAX_TOTAL = 10;
 export const MAX_RESTRICCIONES = 300;
 export const MAX_NOMBRE = 60;
+export const MAX_ASISTENTES = 12;
 export const NOMBRE_INVITADO = "Invitado";
 
 export type Modo =
