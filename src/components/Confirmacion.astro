@@ -57,7 +57,7 @@
    * Número de WhatsApp de contacto, con código de país y sin "+" ni espacios.
    * Ejemplo: "5491122334455". Si queda vacío, no se muestra el enlace.
    */
-  const WHATSAPP = "";
+  const WHATSAPP = "5491139124557";
 
   const BOTON_PRINCIPAL =
     "w-full rounded-sm border border-[#C98B2E] bg-[#C98B2E] px-6 py-4 font-lora text-base font-medium text-white transition duration-200 hover:bg-[#B87824] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60";
@@ -568,34 +568,125 @@
       errorEl.textContent = "";
     }
 
-    function mostrarExito(total: number) {
+    function listarNombres(nombres: string[]): string {
+      if (nombres.length <= 1) return nombres[0] ?? "";
+      return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+    }
+
+    function mensajeDeCambio(total: number, asistentes: string[]): string {
+      const cabecera = `Hola! Cambié la respuesta de la invitación N° ${invitado.id} (${invitado.nombre})`;
+      const solo = modo === "individual-solo";
+
+      let cuerpo: string;
+      if (total === 0) {
+        cuerpo = solo
+          ? "finalmente no voy a poder asistir."
+          : "finalmente no vamos a poder asistir.";
+      } else if (solo) {
+        cuerpo = "ahora voy.";
+      } else if (total === 1) {
+        cuerpo =
+          asistentes.length > 0
+            ? `ahora va ${asistentes[0]}.`
+            : "ahora va 1 persona.";
+      } else if (asistentes.length > 0) {
+        cuerpo = `ahora vamos ${total} — ${asistentes.join(", ")}.`;
+      } else {
+        cuerpo = `ahora vamos ${total}.`;
+      }
+
+      const restricciones = textarea.value.trim();
+      return restricciones
+        ? `${cabecera}: ${cuerpo} Restricciones: ${restricciones}`
+        : `${cabecera}: ${cuerpo}`;
+    }
+
+    function mostrarExito(total: number, asistentes: string[]) {
       const caja = el("div", "mt-2 text-center");
+      const solo = modo === "individual-solo";
 
       caja.appendChild(
         el("p", "font-great-vibes text-4xl text-[#B87824]", "¡Gracias!"),
       );
 
-      caja.appendChild(
-        el(
-          "p",
-          "mt-2 font-lora text-lg font-medium italic text-[#8F683F]",
-          total === 0
-            ? "Gracias por avisar. Te vamos a extrañar."
-            : "Los esperamos el 5 de diciembre.",
-        ),
-      );
+      let detalle: string;
+      if (total === 0) {
+        detalle = solo
+          ? "Anotamos que no vas a poder venir."
+          : "Anotamos que no van a poder venir.";
+      } else if (solo) {
+        detalle = "Anotamos que venís.";
+      } else if (total === 1) {
+        detalle =
+          asistentes.length > 0
+            ? `Anotamos que va ${asistentes[0]}.`
+            : "Anotamos que va 1 persona.";
+      } else if (asistentes.length > 0) {
+        detalle = `Anotamos que van ${total}: ${listarNombres(asistentes)}.`;
+      } else {
+        detalle = `Anotamos que van ${total}.`;
+      }
 
       caja.appendChild(
         el(
           "p",
-          "mt-4 font-lora text-sm italic text-[#8F683F]/80",
-          "Si algo cambia, podés cambiarlo cuando quieras.",
+          "mt-3 font-lora text-lg font-medium italic text-[#8F683F]",
+          detalle,
         ),
       );
+
+      if (total > 0) {
+        caja.appendChild(
+          el(
+            "p",
+            "mt-2 font-lora text-base italic text-[#8F683F]/80",
+            "Los esperamos el 5 de diciembre.",
+          ),
+        );
+      } else {
+        caja.appendChild(
+          el(
+            "p",
+            "mt-2 font-lora text-base italic text-[#8F683F]/80",
+            solo ? "Te vamos a extrañar." : "Los vamos a extrañar.",
+          ),
+        );
+        caja.appendChild(
+          el(
+            "p",
+            "mt-4 font-lora text-sm italic text-[#8F683F]/80",
+            "Si cambiás de opinión, podés cambiar tu respuesta.",
+          ),
+        );
+      }
+
+      // El aviso por WhatsApp solo aparece cuando modifican una respuesta.
+      if (previa) {
+        const enlace = enlaceWhatsApp(mensajeDeCambio(total, asistentes));
+        if (enlace) {
+          caja.appendChild(
+            el(
+              "p",
+              "mt-6 font-lora text-sm italic text-[#8F683F]/80",
+              "Para que no se pierda, avisanos:",
+            ),
+          );
+
+          const avisar = el(
+            "a",
+            "mt-2 flex w-full items-center justify-center gap-2 rounded-sm border border-[#C98B2E] bg-[#C98B2E] px-4 py-3 font-lora text-base font-medium text-white transition duration-200 active:scale-[0.99]",
+            "Avisar por WhatsApp",
+          );
+          avisar.href = enlace;
+          avisar.target = "_blank";
+          avisar.rel = "noopener noreferrer";
+          caja.appendChild(avisar);
+        }
+      }
 
       const cambiar = el(
         "button",
-        "mt-6 w-full rounded-sm border border-[#C98B2E]/40 px-4 py-3 font-lora text-base text-[#B87824] transition duration-200 active:scale-[0.99]",
+        "mt-4 w-full rounded-sm border border-[#C98B2E]/40 px-4 py-3 font-lora text-base text-[#B87824] transition duration-200 active:scale-[0.99]",
         "Cambiar mi respuesta",
       );
       cambiar.type = "button";
@@ -668,7 +759,7 @@
         });
 
         enviando = false;
-        mostrarExito(total);
+        mostrarExito(total, asistentes);
 
         const siguiente = document.getElementById("rsvp");
         if (siguiente) siguiente.scrollIntoView({ block: "center" });
