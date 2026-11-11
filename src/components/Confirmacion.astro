@@ -1,7 +1,7 @@
 ---
 ---
 
-<div id="confirmacion" class="mx-auto max-w-lg">
+<div id="confirmacion" class="mx-auto max-w-lg scroll-mt-8">
   <div class="flex items-center justify-center gap-2">
     <h3 class="font-great-vibes text-4xl text-[#B87824]">
       Confirmación de asistencia
@@ -42,23 +42,7 @@
   </noscript>
 </div>
 
-<button
-  id="boton-confirmar"
-  type="button"
-  aria-label="Ya podés confirmar tu asistencia"
-  class="fixed bottom-6 left-4 z-40 rounded-md border border-[#C98B2E]/40 bg-[#FCFAE7]/95 px-5 py-3 text-center shadow-[0_4px_14px_rgba(143,104,63,0.18)] backdrop-blur transition duration-300 hover:border-[#C98B2E] hover:shadow-[0_6px_18px_rgba(143,104,63,0.3)] active:scale-95"
->
-  <span class="block font-great-vibes text-2xl leading-none text-[#B87824]">
-    Ya podés confirmar
-  </span>
-  <span
-    class="mt-1.5 flex items-center justify-center gap-2 font-lora text-[11px] uppercase tracking-[0.25em] text-[#8F683F]/80"
-  >
-    <span class="h-px w-5 bg-[#C98B2E]/40"></span>
-    tu asistencia
-    <span class="h-px w-5 bg-[#C98B2E]/40"></span>
-  </span>
-</button>
+
 
 <script>
   import { invitados } from "../data/invitados.js";
@@ -80,7 +64,7 @@
   const WHATSAPP = "5491139124557";
 
   const BOTON_PRINCIPAL =
-    "w-full rounded-sm border border-[#C98B2E] bg-[#C98B2E] px-6 py-4 font-lora text-base font-medium text-white transition duration-200 hover:bg-[#B87824] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60";
+    "w-full rounded-sm border border-[#C98B2E] bg-[#C98B2E] px-6 py-4 font-lora text-base font-medium text-white transition duration-200 hover:bg-[#B87824] active:scale-[0.99] disabled:cursor-not-allowed disabled:border-[#C98B2E]/25 disabled:bg-[#E8D8BE] disabled:text-[#8F683F]/70";
 
   const BOTON_SECUNDARIO =
     "w-full rounded-sm border px-4 py-3 font-lora text-base transition duration-200 active:scale-[0.99]";
@@ -106,12 +90,14 @@
   const raiz = document.getElementById("rsvp");
   if (raiz) iniciar(raiz);
 
-  // Botón flotante que lleva a la sección de confirmación
+  // Cartel de acceso rápido a la confirmación
   const botonConfirmar = document.getElementById("boton-confirmar");
   const seccionConfirmacion = document.getElementById("confirmacion");
 
   if (botonConfirmar && seccionConfirmacion) {
-    botonConfirmar.addEventListener("click", () => {
+    botonConfirmar.addEventListener("click", (evento) => {
+      evento.preventDefault();
+
       if (typeof seccionConfirmacion.scrollIntoView === "function") {
         seccionConfirmacion.scrollIntoView({
           behavior: "smooth",
@@ -119,19 +105,6 @@
         });
       }
     });
-
-    if ("IntersectionObserver" in window) {
-      const observador = new IntersectionObserver(
-        (entradas) => {
-          entradas.forEach((entrada) => {
-            botonConfirmar.classList.toggle("hidden", entrada.isIntersecting);
-          });
-        },
-        { threshold: 0.15 },
-      );
-
-      observador.observe(seccionConfirmacion);
-    }
   }
 
   function iniciar(raiz: HTMLElement) {
@@ -721,6 +694,7 @@
       const solo = modo === "individual-solo";
 
       aviso.classList.add("hidden");
+      document.getElementById("rsvp-intro")?.classList.add("hidden");
 
       caja.appendChild(
         el("p", "font-great-vibes text-4xl text-[#B87824]", "¡Gracias!"),
@@ -812,6 +786,7 @@
         form.classList.remove("hidden");
         previa = true;
         interactuado = true;
+        avisoTitulo.textContent = mensajePrevio(totalActual());
         aviso.classList.remove("hidden");
         actualizar();
         raiz.scrollIntoView({ block: "center" });
