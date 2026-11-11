@@ -70,17 +70,8 @@ export function getModo(invitado: Invitado): Modo {
     return "individual-acompanante";
   }
 
-  // Tope propio (ej. una familia de la que no sabemos la cantidad exacta).
-  if (typeof invitado.tope === "number") return "contador";
-
-  // Si no conocemos ningún nombre, contador. Si conocemos al menos uno,
-  // mostramos filas y los que faltan quedan con nombre opcional.
-  const todosDesconocidos = invitado.integrantes.every(
-    (integrante) => integrante.nombre.trim() === NOMBRE_INVITADO,
-  );
-
-  if (todosDesconocidos) return "contador";
-
+  // Todas las familias usan filas. Los integrantes sin nombre aparecen como
+  // campo opcional, así el invitado ve siempre la misma pantalla.
   return "nombres";
 }
 

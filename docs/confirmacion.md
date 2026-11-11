@@ -67,13 +67,13 @@ Sin `.env` el formulario se ve, pero no guarda.
 ## Cómo funciona por dentro
 
 - La invitación se identifica con `?invitado=<id>` (los links ya compartidos).
-- El formulario elige una de cuatro variantes según los datos del invitado:
-  - `nombres`: familia con al menos un nombre cargado → Sí/No por persona. Los
-    integrantes sin nombre aparecen como un campo "Nombre (opcional)".
-  - `contador`: familia con **todos** los integrantes sin nombre, o con un tope
-    propio → contador, sin pedir nombres.
+- El formulario elige una de tres variantes según los datos del invitado:
+  - `nombres`: todas las familias → Sí/No por persona. Los integrantes sin
+    nombre aparecen como un campo "Nombre (opcional)".
   - `individual-solo`: una persona → "Sí, voy a ir" / "No puedo ir".
   - `individual-acompanante`: una persona + acompañante sin nombre.
+- El modo `contador` ya no se usa en invitaciones nuevas: queda solo para
+  mostrar respuestas viejas que se guardaron así.
 - Las respuestas se pueden modificar en cualquier momento: no hay fecha límite.
 - Al volver a entrar se prellena con la respuesta guardada (`GET`, o
   `localStorage` si no hay red).
