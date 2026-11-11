@@ -28,7 +28,12 @@ import Vestimenta from "./Vestimenta.astro";
       <span
         class="mt-0.5 block font-lora text-[13px] italic leading-snug text-[#8F683F]/75"
       >
-        Tocá acá o buscá más abajo la sección de confirmación
+        <strong class="font-semibold not-italic text-[#8F683F]">Tocá acá</strong>{" "}
+        o buscá más abajo la sección de confirmación{" "}
+        <span
+          class="flecha-abajo ml-0.5 inline-block not-italic"
+          aria-hidden="true">↓</span
+        >
       </span>
     </button>
 
@@ -48,3 +53,25 @@ import Vestimenta from "./Vestimenta.astro";
   <Vestimenta />
   <CuentaRegresiva />
 </main>
+
+<style>
+  .flecha-abajo {
+    animation: flecha-bajar 1.5s ease-in-out infinite;
+  }
+
+  @keyframes flecha-bajar {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flecha-abajo {
+      animation: none;
+    }
+  }
+</style>
