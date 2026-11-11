@@ -91,6 +91,16 @@
     import lanzarConfetti from "canvas-confetti";
 
     // --------------------------------
+    // SCROLL: mientras el sobre está cerrado, la portada maneja su propio
+    // scroll. Sin esto aparecen dos barras (la del body y la del overlay).
+    // --------------------------------
+
+    const bloquearScroll = () => document.body.classList.add("overflow-hidden");
+    const liberarScroll = () => document.body.classList.remove("overflow-hidden");
+
+    bloquearScroll();
+
+    // --------------------------------
     // BUSCAR INVITADO POR ID
     // --------------------------------
 
@@ -173,6 +183,8 @@
     }
 
     boton?.addEventListener("click", async () => {
+      liberarScroll();
+
       if (audioContext?.state === "suspended") {
         await audioContext.resume();
       }
